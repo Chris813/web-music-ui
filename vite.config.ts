@@ -11,4 +11,10 @@ export default defineConfig({
       "@components": resolve(__dirname, "src/components"),
     },
   },
+  server: {
+    watch: {
+      // 禁止自动打包
+      disableGlobbing: true,
+    },
+  },
 });
