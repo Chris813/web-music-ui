@@ -1,3 +1,9 @@
 import { defineStore } from "pinia";
 
-export const useTestStore = defineStore("name", {});
+export const useConfigStore = defineStore("config", {
+  state: () => {
+    return {
+      baseURL: "https://netease-cloud-music-api-eta-lovat.vercel.app/",
+    };
+  },
+});

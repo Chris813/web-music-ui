@@ -8,12 +8,15 @@ import {
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/hello",
-    component: () => import("@components/HelloWorld.vue"),
-  },
-  {
-    path: "/register",
-    component: () => import("@components/register.vue"),
+    path: "/",
+    component: () => import("@/pages/find.vue"),
+    children: [
+      {
+        path: "/recommend",
+        name: "recommend",
+        component: () => import("@components/recommend.vue"),
+      },
+    ],
   },
 ];
 

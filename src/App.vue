@@ -1,9 +1,32 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MyAside from "@components/aside.vue";
+</script>
 
 <template>
-  <router-link to="/hello">hello</router-link>|
-  <router-link to="/register">register</router-link>
-  <router-view></router-view>
+  <div class="common-layout">
+    <div class="aside"><my-aside></my-aside></div>
+    <div class="container">
+      <RouterView></RouterView>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.common-layout {
+  max-height: 860px;
+  height: 90vh;
+  background: #fff;
+  border-radius: 15px;
+  display: flex;
+  overflow: hidden;
+  .aside {
+    flex: 0 0 80px;
+  }
+  .container {
+    flex: 1 1 auto;
+    display: flex;
+    height: 60px;
+    flex-wrap: wrap;
+  }
+}
+</style>

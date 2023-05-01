@@ -29,6 +29,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: #dde2eb;
+  padding: 2em;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -61,8 +64,8 @@ button:focus-visible {
 
 #app {
   max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -77,4 +80,41 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+@font-face {
+  font-family: "iconfont"; /* Project id 4046343 */
+  src: url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.woff2?t=1682941948714")
+      format("woff2"),
+    url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.woff?t=1682941948714")
+      format("woff"),
+    url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.ttf?t=1682941948714")
+      format("truetype");
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-faxian:before {
+  content: "\e631";
+}
+
+.icon-yinle:before {
+  content: "\e63b";
+}
+
+.icon-zhanghao:before {
+  content: "\e632";
+}
+
+.icon-bofangMV:before {
+  content: "\e6a3";
+}
+.icon-sousuo:before {
+  content: "\e651";
 }
