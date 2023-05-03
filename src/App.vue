@@ -24,9 +24,6 @@ import MyAside from "@components/aside.vue";
   }
   .container {
     flex: 1 1 auto;
-    display: flex;
-    height: 60px;
-    flex-wrap: wrap;
   }
 }
 </style>

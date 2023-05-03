@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-export function getBanner() {
+export function getBannerApi() {
   return request({
     url: "/banner",
     method: "get",

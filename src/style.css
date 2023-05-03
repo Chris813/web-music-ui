@@ -84,11 +84,11 @@ button:focus-visible {
 
 @font-face {
   font-family: "iconfont"; /* Project id 4046343 */
-  src: url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.woff2?t=1682941948714")
+  src: url("//at.alicdn.com/t/c/font_4046343_btp9sp01qw9.woff2?t=1683101360327")
       format("woff2"),
-    url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.woff?t=1682941948714")
+    url("//at.alicdn.com/t/c/font_4046343_btp9sp01qw9.woff?t=1683101360327")
       format("woff"),
-    url("//at.alicdn.com/t/c/font_4046343_fz7hxx5wsda.ttf?t=1682941948714")
+    url("//at.alicdn.com/t/c/font_4046343_btp9sp01qw9.ttf?t=1683101360327")
       format("truetype");
 }
 
@@ -98,6 +98,18 @@ button:focus-visible {
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-left:before {
+  content: "\e697";
+}
+
+.icon-right:before {
+  content: "\e699";
+}
+
+.icon-sousuo:before {
+  content: "\e651";
 }
 
 .icon-faxian:before {
@@ -114,7 +126,4 @@ button:focus-visible {
 
 .icon-bofangMV:before {
   content: "\e6a3";
-}
-.icon-sousuo:before {
-  content: "\e651";
 }

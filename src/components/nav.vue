@@ -76,6 +76,7 @@ nav {
     height: 35px;
     display: flex;
     width: 15rem;
+    padding-right: 3rem;
     input {
       height: 100%;
       width: 100%;
