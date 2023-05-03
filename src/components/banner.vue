@@ -56,6 +56,7 @@ const visibleImages = computed(() => {
 //绑定左中右类型
 type ItemPositionClass = "left" | "center" | "right";
 const itemPositionClass = (index: number) => {
+  console.log(index);
   if (index === 0) {
     return "left";
   } else if (index === 1) {
@@ -93,7 +94,7 @@ onMounted(() => {
   position: relative;
 
   .banner-item {
-    width: 440px;
+    width: 540px;
     position: absolute;
     overflow: hidden;
     z-index: 0;
@@ -104,15 +105,16 @@ onMounted(() => {
       display: block;
     }
     &.left {
-      transform: translateX(-300px) scale(1);
+      transform: translateX(-300px);
       filter: brightness(0.7);
     }
     &.right {
-      transform: translateX(300px) scale(1);
+      transform: translateX(300px);
       filter: brightness(0.7);
     }
     &.center {
-      transform: scale(1.2) translateX(0);
+      width: 640px;
+      transform: translateX(0);
       z-index: 1;
     }
   }

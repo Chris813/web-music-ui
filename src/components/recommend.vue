@@ -21,6 +21,7 @@ import banner from "@components/banner.vue";
     justify-content: center;
     height: 270px;
     position: relative;
+    margin: 0 auto;
   }
 }
 </style>
