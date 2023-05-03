@@ -56,7 +56,6 @@ const visibleImages = computed(() => {
 //绑定左中右类型
 type ItemPositionClass = "left" | "center" | "right";
 const itemPositionClass = (index: number) => {
-  console.log(index);
   if (index === 0) {
     return "left";
   } else if (index === 1) {
