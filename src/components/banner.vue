@@ -91,14 +91,14 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   position: relative;
-
+  transition: all 0.5s ease-in-out;
   .banner-item {
     width: 540px;
     position: absolute;
     overflow: hidden;
     z-index: 0;
     border-radius: 10px;
-    transition: all 0.5s ease-in-out;
+
     img {
       width: 100%;
       display: block;

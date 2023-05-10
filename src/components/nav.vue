@@ -42,6 +42,7 @@ function handleSelect(index: number) {
 
 <style scoped lang="scss">
 nav {
+  position: fixed;
   border-bottom: solid 1px var(--el-menu-border-color);
   display: flex;
   height: 60px;

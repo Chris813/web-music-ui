@@ -1,6 +1,6 @@
 <template>
   <my-nav></my-nav>
-  <RouterView></RouterView>
+  <KeepAlive><RouterView></RouterView></KeepAlive>
 </template>
 
 <script setup lang="ts">

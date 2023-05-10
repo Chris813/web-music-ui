@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MyAside from "@components/aside.vue";
+import Palysong from "@components/playsong.vue";
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import MyAside from "@components/aside.vue";
       <RouterView></RouterView>
     </div>
   </div>
+  <palysong></palysong>
 </template>
 
 <style scoped lang="scss">

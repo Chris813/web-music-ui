@@ -1,5 +1,13 @@
 <template>
   <div class="aside-menu">
+    <div class="his-menu">
+      <div class="btn btn_pre" :passive="!canGoBack" @click="goBack">
+        <i class="iconfont icon-left"></i>
+      </div>
+      <div class="btn btn_next" :passive="!canGoForward" @click="goForward">
+        <i class="iconfont icon-right"></i>
+      </div>
+    </div>
     <div
       class="menu-link"
       v-for="(item, index) in menuList"
@@ -14,8 +22,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
+let router = useRouter();
 let activeIndex = ref(0);
 const menuList = [
   { icon: "icon-faxian", title: "发现" },
@@ -26,6 +36,19 @@ const menuList = [
 function handleSelect(index: number) {
   activeIndex.value = index;
 }
+
+let canGoBack = computed(() => {
+  return router.currentRoute.value.matched.length > 1;
+});
+let canGoForward = computed(() => {});
+const goBack = () => {
+  console.log(router.currentRoute.value.matched);
+  router.back();
+};
+
+const goForward = () => {
+  router.go(1);
+};
 </script>
 
 <style scoped lang="scss">
@@ -35,6 +58,22 @@ function handleSelect(index: number) {
   flex-direction: column;
   justify-content: center;
   border-right: 1px solid var(--el-menu-border-color);
+  position: relative;
+  .his-menu {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: flex;
+    transform: translate(-50%, 100%);
+    .btn {
+      &.btn_pre {
+        padding-right: 20px;
+      }
+      &.passive {
+        color: rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
   .menu-link {
     display: flex;
     flex-direction: column;
