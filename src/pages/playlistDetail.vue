@@ -4,7 +4,12 @@
       <template #template>
         <el-skeleton-item
           variant="image"
-          style="width: 180px; height: 180px; border-radius: 6px"
+          style="
+            width: 180px;
+            height: 180px;
+            border-radius: 6px;
+            padding-left: 20px;
+          "
         />
       </template>
       <template #default>
@@ -14,11 +19,11 @@
 
     <el-skeleton style="width: 240px" :loading="loading" animated>
       <template #template>
-        <el-skeleton-item variant="h2" style="width: 100%" />
-        <el-skeleton-item variant="text" />
-        <el-skeleton-item variant="text" />
-        <el-skeleton-item variant="text" />
-        <el-skeleton-item variant="text" />
+        <el-skeleton-item variant="h2" style="width: 800px" />
+        <el-skeleton-item variant="text" style="width: 800px" />
+        <el-skeleton-item variant="text" style="width: 800px" />
+        <el-skeleton-item variant="text" style="width: 800px" />
+        <el-skeleton-item variant="text" style="width: 800px" />
       </template>
       <template #default>
         <div class="detail">
@@ -55,7 +60,7 @@
         >{{ item.title }}</a
       >
     </div>
-    <RouterView></RouterView>
+    <RouterView :tracks="tracks"></RouterView>
   </div>
 </template>
 
@@ -64,40 +69,16 @@ import { ref } from "vue";
 import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlaylistDetailApi } from "@/api/info";
-import { ta } from "element-plus/es/locale";
 import router from "@/router";
+import { formatDate, formatCount } from "@/utils/fommater";
 const route = useRoute();
-
-function formatDate(time: any): string {
-  let date = new Date(time);
-
-  let YY = date.getFullYear();
-  let MM =
-    date.getMonth() + 1 < 10
-      ? "0" + (date.getMonth() + 1)
-      : date.getMonth() + 1;
-  let DD = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-  let hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let ss = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
-  // 这里修改返回时间的格式
-  return YY + "-" + MM + "-" + DD;
-}
-function formatCount(count: number): string {
-  if (count > 9999) {
-    return (count / 10000).toFixed(1) + "万";
-  } else {
-    return count.toString();
-  }
-}
 
 interface songItem {
   name: string;
   ar: { name: string; id: number }[];
-  al: { name: string; id: number }[];
+  al: { name: string; id: number };
   id: number;
-  publishTime: number;
+  dt: number;
 }
 
 interface playlistItem {
@@ -122,12 +103,15 @@ let pDetail: Ref<playlistItem> = ref({
   tracks: [],
   playCount: 0,
 });
+let tracks: Ref<songItem[]> = ref([]);
 let loading = ref(true);
 async function getPlaylistDetail() {
+  console.log(Number(route.params.id));
   const res = await getPlaylistDetailApi(Number(route.params.id));
   if (res.code === 200) {
     pDetail.value = res.playlist;
     loading.value = false;
+    tracks.value = res.playlist.tracks;
     console.log(pDetail.value);
   }
 }
@@ -157,7 +141,7 @@ getPlaylistDetail();
 <style scoped lang="scss">
 .p-title {
   width: 100%;
-  padding-top: 20px;
+  padding-top: 80px;
   display: flex;
   .p-img {
     padding-left: 20px;

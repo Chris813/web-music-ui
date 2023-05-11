@@ -68,8 +68,9 @@ async function getPlaylist() {
 
 const router = useRouter();
 function clickPlaylist(index: number) {
+  console.log(playlists.value[index].id);
   router.push({
-    name: "pDetail",
+    name: "tracks",
     params: {
       id: playlists.value[index].id,
     },

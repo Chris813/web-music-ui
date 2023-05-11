@@ -46,7 +46,7 @@ nav {
   border-bottom: solid 1px var(--el-menu-border-color);
   display: flex;
   height: 60px;
-  width: 100%;
+  width: 1200px;
   align-items: center;
   justify-content: space-between;
   padding-right: 3rem;
