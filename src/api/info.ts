@@ -25,3 +25,24 @@ export function getPlaylistDetailApi(pid: number) {
     },
   });
 }
+
+export function getSongUrlApi(sid: number, level: string = "standard") {
+  return request({
+    url: "/song/url/v1",
+    params: {
+      id: sid,
+      level: level,
+    },
+  });
+}
+
+export function getAllSongApi(pid: number, limit: number = 20) {
+  return request({
+    url: "/playlist/track/all",
+    params: {
+      id: pid,
+      limit: limit,
+      offset: 1,
+    },
+  });
+}

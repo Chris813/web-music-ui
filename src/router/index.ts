@@ -20,7 +20,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "/playlist/:id",
-        name: "pDetail",
         component: () => import("@/pages/playlistDetail.vue"),
         children: [
           {

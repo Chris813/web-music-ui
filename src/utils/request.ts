@@ -1,10 +1,8 @@
 import { useConfigStore } from "@/stores/index";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { error } from "console";
 
-const configStore = useConfigStore();
 const service: AxiosInstance = axios.create({
-  baseURL: configStore.baseURL,
+  baseURL: "https://netease-cloud-music-api-eta-lovat.vercel.app/",
   timeout: 10000,
 });
 

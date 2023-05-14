@@ -60,12 +60,14 @@
         >{{ item.title }}</a
       >
     </div>
-    <RouterView :tracks="tracks"></RouterView>
+    <div class="content">
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlaylistDetailApi } from "@/api/info";
@@ -103,16 +105,16 @@ let pDetail: Ref<playlistItem> = ref({
   tracks: [],
   playCount: 0,
 });
-let tracks: Ref<songItem[]> = ref([]);
+// let tracks: Ref<songItem[]> = ref([]);
 let loading = ref(true);
+let trackId = ref(0);
 async function getPlaylistDetail() {
-  console.log(Number(route.params.id));
   const res = await getPlaylistDetailApi(Number(route.params.id));
   if (res.code === 200) {
     pDetail.value = res.playlist;
     loading.value = false;
-    tracks.value = res.playlist.tracks;
-    console.log(pDetail.value);
+    // tracks.value = res.playlist.tracks;
+    // console.log(tracks.value);
   }
 }
 function toggleDes(event: Event) {
@@ -127,21 +129,25 @@ const playNav = [
 ];
 let activeIndex = ref(0);
 function handleSelect(index: number) {
+  console.log(index);
   if (index !== activeIndex.value) {
     activeIndex.value = index;
+
     router.push({
-      path: `${route.fullPath}/${playNav[index].name}`,
+      name: playNav[index].name,
+      params: { id: route.params.id },
     });
   }
 }
-
-getPlaylistDetail();
+onMounted(() => {
+  getPlaylistDetail();
+});
 </script>
 
 <style scoped lang="scss">
 .p-title {
   width: 100%;
-  padding-top: 80px;
+  padding-top: 30px;
   display: flex;
   .p-img {
     padding-left: 20px;
@@ -242,6 +248,9 @@ getPlaylistDetail();
         border-bottom: 2px solid red;
       }
     }
+  }
+  .content {
+    overflow: hidden auto;
   }
 }
 </style>

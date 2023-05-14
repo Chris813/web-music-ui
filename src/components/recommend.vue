@@ -1,32 +1,30 @@
 <template>
-  <div class="main">
-    <div class="container">
-      <banner />
+  <div class="container">
+    <banner />
+  </div>
+  <div class="r-playlist">
+    <div class="p-head">
+      <div class="p-title">推荐歌单</div>
+      <span class="p-more">更多></span>
     </div>
-    <div class="r-playlist">
-      <div class="p-head">
-        <div class="p-title">推荐歌单</div>
-        <span class="p-more">更多></span>
-      </div>
-      <div class="p-body">
-        <el-skeleton :rows="5" animated :loading="loading">
-          <div
-            class="p-item"
-            v-for="(item, index) in playlists"
-            :key="index"
-            @click="clickPlaylist(index)"
-          >
-            <div class="p-card">
-              <img :src="item.picUrl" class="image" />
-              <div class="p-count">
-                <i class="iconfont icon-listen"></i>{{ item.playCount }}
-              </div>
+    <div class="p-body">
+      <el-skeleton :rows="5" animated :loading="loading">
+        <div
+          class="p-item"
+          v-for="(item, index) in playlists"
+          :key="index"
+          @click="clickPlaylist(index)"
+        >
+          <div class="p-card">
+            <img :src="item.picUrl" class="image" />
+            <div class="p-count">
+              <i class="iconfont icon-listen"></i>{{ item.playCount }}
             </div>
-
-            <div class="p-name">{{ item.name }}</div>
           </div>
-        </el-skeleton>
-      </div>
+
+          <div class="p-name">{{ item.name }}</div>
+        </div>
+      </el-skeleton>
     </div>
   </div>
 </template>
@@ -81,74 +79,66 @@ getPlaylist();
 </script>
 
 <style scoped lang="scss">
-.main {
-  margin-top: 0;
-  width: 100%;
+.container {
+  width: 1150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 270px;
   position: relative;
-  top: 60px;
-  overflow: scroll;
-  height: 100%;
-  .container {
-    width: 1150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 270px;
-    position: relative;
-    margin: 0 auto;
-  }
-  .r-playlist {
-    margin: 20px;
-    // display: flex;
-    .p-head {
-      .p-title {
-        font : {
-          size: 1.1rem;
-          weight: 600;
-        }
-        position: absolute;
-        left: 20px;
+  margin: 0 auto;
+}
+.r-playlist {
+  margin: 20px;
+  // display: flex;
+  .p-head {
+    .p-title {
+      font : {
+        size: 1.1rem;
+        weight: 600;
       }
-      .p-more {
-        position: absolute;
-        color: lightslategrey;
-        font: {
-          size: 0.8rem;
-        }
-        right: 15px;
-      }
+      position: absolute;
+      left: 20px;
     }
-    .p-body {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      padding-top: 30px;
-      .p-item {
-        position: relative;
-        img {
-          height: 208px;
-          width: 208px;
-          object-fit: cover;
-        }
-        margin-right: 15px;
-        margin-bottom: 30px;
-        .el-card {
-          border: none;
-        }
-        .p-count {
-          position: absolute;
-          right: 0;
-          color: #fff;
-          top: 0;
-          text-align: center;
-          background-color: rgba(0, 0, 0, 0.2);
-        }
-        .p-name {
-          width: 208px;
-          font-size: 0.9rem;
-          text-align: start;
-        }
+    .p-more {
+      position: absolute;
+      color: lightslategrey;
+      font: {
+        size: 0.8rem;
+      }
+      right: 15px;
+    }
+  }
+  .p-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-top: 30px;
+    .p-item {
+      position: relative;
+      img {
+        height: 208px;
+        width: 208px;
+        object-fit: cover;
+      }
+      margin-right: 15px;
+      margin-bottom: 30px;
+      .el-card {
+        border: none;
+      }
+      .p-count {
+        position: absolute;
+        right: 0;
+        color: #fff;
+        top: 0;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      .p-name {
+        width: 208px;
+        font-size: 0.9rem;
+        text-align: start;
       }
     }
   }

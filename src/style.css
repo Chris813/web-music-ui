@@ -86,11 +86,11 @@ button:focus-visible {
 
 @font-face {
   font-family: "iconfont"; /* Project id 4046343 */
-  src: url("//at.alicdn.com/t/c/font_4046343_zhoug4g5m7s.woff2?t=1683469033398")
+  src: url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.woff2?t=1684061646644")
       format("woff2"),
-    url("//at.alicdn.com/t/c/font_4046343_zhoug4g5m7s.woff?t=1683469033398")
+    url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.woff?t=1684061646644")
       format("woff"),
-    url("//at.alicdn.com/t/c/font_4046343_zhoug4g5m7s.ttf?t=1683469033398")
+    url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.ttf?t=1684061646644")
       format("truetype");
 }
 
@@ -101,6 +101,35 @@ button:focus-visible {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.icon-shangyishou:before {
+  content: "\e63c";
+}
+
+.icon-xiayishou:before {
+  content: "\e63e";
+}
+
+.icon-24gf-pauseCircle:before {
+  content: "\ea81";
+}
+
+.icon-24gf-playCircle:before {
+  content: "\ea82";
+}
+
+.icon-jushoucang:before {
+  content: "\e643";
+}
+
+.icon-xiazaidaoru:before {
+  content: "\e8c6";
+}
+
+.icon-listen:before {
+  content: "\e721";
+}
+
 .icon-left:before {
   content: "\e697";
 }
@@ -127,7 +156,4 @@ button:focus-visible {
 
 .icon-bofangMV:before {
   content: "\e6a3";
-}
-.icon-listen:before {
-  content: "\e721";
 }

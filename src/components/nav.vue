@@ -49,7 +49,9 @@ nav {
   width: 1200px;
   align-items: center;
   justify-content: space-between;
-  padding-right: 3rem;
+  border-radius: 0 15px 0 0;
+  z-index: 10;
+  background-color: #fff;
   .header-menu {
     display: flex;
     align-items: center;
