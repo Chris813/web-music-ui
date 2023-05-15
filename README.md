@@ -13,6 +13,16 @@ ui:element-plus@2.3.3
 
 音乐播放组件
 
+## 已完成
+
+- 首页部分推荐模块
+- 歌单详情
+- 播放歌曲
+
+## TODO
+
+- 歌单内歌曲下拉刷新
+
 # 问题
 
 ## 已解决
@@ -61,5 +71,19 @@ watch(
 ### 嵌套子路由
 
 在 tracks.vue 组件内根据`route.params.id`获取歌单歌曲.
+
+### 音乐对象方法
+
+使用`new Audio()`创建音频实例对象
+
+- play(): 播放音频。
+- pause(): 暂停音频播放。
+- load(): 重新加载音频。
+- canPlayType(type): 检查浏览器是否支持指定的音频类型，type 参数是音频类型的 MIME 类型，例如 "audio/mp3"。
+- addEventListener(event, listener): 添加事件监听器来处理音频播放过程中的不同事件，常见的事件有 "play"、"pause"、"ended" 等。
+- removeEventListener(event, listener): 移除先前添加的事件监听器。
+- currentTime: 获取或设置当前音频播放的时间位置（以秒为单位）。
+- duration: 获取音频的总时长（以秒为单位）。
+- volume: 获取或设置音频的音量，范围是 0.0（静音）到 1.0（最大音量）。
 
 ## 未解决 bug

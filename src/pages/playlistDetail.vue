@@ -61,7 +61,7 @@
       >
     </div>
     <div class="content">
-      <RouterView></RouterView>
+      <KeepAlive><RouterView></RouterView></KeepAlive>
     </div>
   </div>
 </template>
