@@ -86,11 +86,11 @@ button:focus-visible {
 
 @font-face {
   font-family: "iconfont"; /* Project id 4046343 */
-  src: url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.woff2?t=1684061646644")
+  src: url("//at.alicdn.com/t/c/font_4046343_mt2pst9cnj.woff2?t=1684153520962")
       format("woff2"),
-    url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.woff?t=1684061646644")
+    url("//at.alicdn.com/t/c/font_4046343_mt2pst9cnj.woff?t=1684153520962")
       format("woff"),
-    url("//at.alicdn.com/t/c/font_4046343_et0b15m6o8.ttf?t=1684061646644")
+    url("//at.alicdn.com/t/c/font_4046343_mt2pst9cnj.ttf?t=1684153520962")
       format("truetype");
 }
 
@@ -100,6 +100,17 @@ button:focus-visible {
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yinliang:before {
+  content: "\e87a";
+}
+
+.icon-24gl-volumeCross:before {
+  content: "\ea0b";
+}
+.icon-musiclist:before {
+  content: "\e69c";
 }
 
 .icon-shangyishou:before {

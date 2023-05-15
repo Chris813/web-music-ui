@@ -74,7 +74,6 @@ const handleCurrentChange = (val: TableItem) => {
   currentRow.value = val;
   playId.value = val.id;
   emit("playSong", currentRow.value);
-  console.log(playId.value);
 };
 
 interface SongItem {
