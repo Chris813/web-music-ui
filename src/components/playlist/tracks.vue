@@ -11,7 +11,7 @@
     <el-table-column prop="s_singer" label="歌手" width="220" />
     <el-table-column prop="s_al" label="专辑名" width="230" />
     <el-table-column prop="s_time" label="时间" width="230" />
-    <el-table-column label="Operations" width="230">
+    <el-table-column label="操作" width="230">
       <template #default="scope">
         <div class="btn">
           <svg

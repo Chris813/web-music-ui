@@ -4,7 +4,7 @@
       <img :src="song.al_pic" alt="" />
       <div class="text">
         <span class="name">{{ song.name }}</span
-        ><span class="artist">{{ song.s_singer }}</span>
+        ><span class="artist"> - {{ song.s_singer }}</span>
       </div>
     </div>
     <div class="control">
@@ -25,13 +25,24 @@
       <span class="time" v-if="song.id"
         >{{ currentTime }}/{{ song.s_time }}</span
       >
-      <div class="progress-bar">
-        <div class="pro-btn"></div>
+      <div class="progress-bar" @click="clickProgress">
+        <div class="pro-btn" :style="{ left: barWidth }"></div>
         <div class="progress__current" :style="{ width: barWidth }"></div>
       </div>
     </div>
     <div class="btn">
-      <div class="volume"><i class="iconfont icon-yinliang"></i></div>
+      <div class="shoucang"><i class="iconfont icon-jushoucang"></i></div>
+      <div class="volume">
+        <div class="v-control">
+          <div class="bar" @click="clickVolumeBar">
+            <div class="current-volume" :style="{ height: volumeHeight }"></div>
+          </div>
+        </div>
+        <div class="v-icon" @click="clickVolume">
+          <i v-if="isVolume" class="iconfont icon-yinliang"></i>
+          <i v-else class="iconfont icon-24gl-volumeCross"></i>
+        </div>
+      </div>
       <div class="tracklist"><i class="iconfont icon-musiclist"></i></div>
     </div>
   </div>
@@ -40,19 +51,48 @@
 <script setup lang="ts">
 import { getSongUrlApi } from "@/api/info";
 import { useEventsBus } from "@/utils/useEmitter";
-import { emit } from "process";
 import { Ref, ref, watch } from "vue";
 
 const audio: Ref<HTMLAudioElement> = ref(new Audio());
-
+//音量控制
+const isVolume = ref(true);
+const currentVolume = ref(0);
+const volumeHeight = ref("0");
+function clickVolume() {
+  isVolume.value = !isVolume.value;
+  if (isVolume.value) {
+    audio.value.volume = currentVolume.value;
+    volumeHeight.value = currentVolume.value * 80 + "px";
+  } else {
+    //不修改之前的currentVolume
+    currentVolume.value = audio.value.volume;
+    audio.value.volume = 0;
+    volumeHeight.value = "0";
+  }
+}
+function clickVolumeBar(e: MouseEvent) {
+  console.log(e.offsetY);
+  let position = e.offsetY;
+  let currentBar = e.target as HTMLElement;
+  let volume = currentBar.offsetParent as HTMLElement;
+  if (position > volume.offsetHeight) {
+    position = 100;
+  }
+  if (position < 0) {
+    position = 0;
+  }
+  volumeHeight.value = position + "px";
+  audio.value.volume = position / volume.offsetHeight;
+  currentVolume.value = audio.value.volume;
+}
 const barWidth = ref("0");
-const circleLeft = ref("");
+// const circleLeft = ref("");
 const currentTime = ref("00:00");
 function generateTime() {
   if (audio) {
     let width = (100 / audio.value.duration) * audio.value.currentTime;
     barWidth.value = width + "%";
-    circleLeft.value = width + "%";
+    // circleLeft.value = width + "%";
     let curmin = Math.floor(audio.value.currentTime / 60);
     let cursec = Math.floor(audio.value.currentTime - curmin * 60);
     currentTime.value =
@@ -62,6 +102,8 @@ function generateTime() {
 function resetAudio() {
   barWidth.value = "0";
   currentTime.value = "00:00";
+  currentVolume.value = audio.value.volume;
+  volumeHeight.value = currentVolume.value * 80 + "px";
   if (songUrl.value !== "") {
     audio.value.src = songUrl.value;
     audio.value.ontimeupdate = () => {
@@ -91,6 +133,24 @@ function clickPlay() {
 function clickPrev() {}
 
 function clickNext() {}
+
+function clickProgress(e: MouseEvent) {
+  //e.offsetX就是相对于进度条起始点的偏移
+  audio.value.pause();
+  let position = e.offsetX;
+  let progress = e.target as HTMLElement;
+  let percentage = (100 * position) / progress.offsetWidth;
+  if (percentage > 100) {
+    percentage = 100;
+  }
+  if (percentage < 0) {
+    percentage = 0;
+  }
+  console.log(percentage);
+  barWidth.value = percentage + "%";
+  audio.value.currentTime = (percentage * audio.value.duration) / 100;
+  audio.value.play();
+}
 
 interface SongItem {
   name: string;
@@ -154,14 +214,15 @@ async function getSongUrl(sid: number) {
       height: 70px;
     }
     .text {
-      padding-left: 20px;
+      top: 20px;
+      position: absolute;
+      left: 310px;
       .name {
         font: {
           size: 16px;
         }
       }
       .artist {
-        display: block;
         font: {
           size: 14px;
         }
@@ -196,11 +257,26 @@ async function getSongUrl(sid: number) {
       font-weight: 500;
     }
     .progress-bar {
+      position: relative;
       width: 600px;
       background-color: #d0d8e6;
       height: 6px;
       border-radius: 10px;
       cursor: pointer;
+      &:hover {
+        .pro-btn {
+          opacity: 1;
+        }
+      }
+      .pro-btn {
+        opacity: 0;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: darkred;
+        transform: translate(-50%, -20%);
+      }
       .progress__current {
         background-color: darkred;
         height: inherit;
@@ -210,16 +286,64 @@ async function getSongUrl(sid: number) {
   }
   .btn {
     display: flex;
-    padding-left: 220px;
+    padding-left: 200px;
     align-items: center;
     .iconfont {
       font-size: 32px;
       color: #71829e;
     }
-    .volume {
+    .volume,
+    .shoucang {
       padding-right: 10px;
       .iconfont {
         font-size: 26px;
+      }
+    }
+    .volume {
+      position: relative;
+      cursor: pointer;
+      &:hover {
+        .v-control {
+          opacity: 1;
+        }
+      }
+      .v-control {
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 45px;
+        left: -5px;
+        width: 30px;
+        height: 100px;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+        &::after {
+          content: "";
+          width: 10px;
+          height: 10px;
+          background-color: #fff;
+          position: absolute;
+          bottom: -4.5px;
+          left: 9px;
+          transform-origin: center;
+          transform: rotate(45deg);
+          box-shadow: 3.5px 3.5px 5px 0px rgba(0, 0, 0, 0.1);
+        }
+        .bar {
+          width: 6px;
+          height: 80px;
+          border-radius: 5px;
+          background-color: #d0d8e6;
+          transform: rotate(180deg);
+          .current-volume {
+            height: inherit;
+            background-color: red;
+            width: 6px;
+          }
+        }
       }
     }
   }
