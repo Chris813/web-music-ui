@@ -53,11 +53,10 @@
 
 <script setup lang="ts">
 import { useEventsBus } from "@/utils/useEmitter";
-import { formatDuration } from "@/utils/fommater";
 import { ElTable } from "element-plus";
 import { Ref, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { getAllSongApi } from "@/api/info";
+
 const route = useRoute();
 const currentRow: Ref<TableItem> = ref({
   name: "",
@@ -69,20 +68,35 @@ const currentRow: Ref<TableItem> = ref({
 });
 const singleTableRef = ref<InstanceType<typeof ElTable>>();
 const playId = ref(0);
-const { emit } = useEventsBus();
+const { emit, bus } = useEventsBus();
+watch(
+  () => bus.value.get("playSongChange"),
+  (val) => {
+    console.log(val);
+    singleTableRef.value!.setCurrentRow(tableData.value[val[0]]);
+  }
+);
 const handleCurrentChange = (val: TableItem) => {
   currentRow.value = val;
   playId.value = val.id;
-  emit("playSong", currentRow.value);
+  let index = tableData.value.findIndex((item) => item.id == val.id);
+  console.log(index);
+  emit("playSong", currentRow.value, index);
+  let newTrack = {
+    id: route.params.id,
+    tracks: tableData.value,
+  };
+  //在没有歌单列表时或者有新歌单时触发
+  if (bus.value.get("playTrack")) {
+    let trackCache = bus.value.get("playTrack");
+    if (route.params.id != trackCache[0].id) {
+      emit("playTrack", newTrack);
+    }
+  } else {
+    emit("playTrack", newTrack);
+  }
 };
 
-interface SongItem {
-  name: string;
-  ar: { name: string; id: number }[];
-  al: { name: string; id: number; picUrl: string };
-  id: number;
-  dt: number;
-}
 interface TableItem {
   name: string;
   s_singer: string;
@@ -91,30 +105,10 @@ interface TableItem {
   id: number;
   al_pic: string;
 }
-const tableData: Ref<TableItem[]> = ref([]);
-
-async function initTableData() {
-  let res = await getAllSongApi(Number(route.params.id));
-  console.log(res);
-  res.songs.forEach((item: SongItem, index: number) => {
-    const temp = {
-      name: item.name,
-      s_al: item.al.name,
-      s_time: formatDuration(item.dt),
-      s_singer: "",
-      id: item.id,
-      al_pic: item.al.picUrl,
-    };
-    //把每首歌曲的歌手名拼接成一个字符串
-    if (item.ar.length > 1) {
-      temp.s_singer = item.ar.map((item) => item.name).join("/");
-    } else {
-      temp.s_singer = item.ar[0].name;
-    }
-    tableData.value[index] = temp;
-  });
-}
-initTableData();
+const props = defineProps<{
+  tracks: TableItem[];
+}>();
+const tableData = ref(props.tracks);
 </script>
 
 <style scoped lang="scss">

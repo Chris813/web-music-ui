@@ -43,7 +43,15 @@
           <i v-else class="iconfont icon-24gl-volumeCross"></i>
         </div>
       </div>
-      <div class="tracklist"><i class="iconfont icon-musiclist"></i></div>
+      <div class="btn-tracklist" @click="showTrackList">
+        <i class="iconfont icon-musiclist"></i>
+      </div>
+      <div
+        class="trackList"
+        :style="{ display: isShowTrack ? 'block' : 'none' }"
+      >
+        <tracklist :tracks="trackData"></tracklist>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +60,26 @@
 import { getSongUrlApi } from "@/api/info";
 import { useEventsBus } from "@/utils/useEmitter";
 import { Ref, ref, watch } from "vue";
+import tracklist from "@/components/playlist/trackList.vue";
+
+interface SongItem {
+  name: string;
+  s_singer: string;
+  s_al: string;
+  s_time: string;
+  id: number;
+  al_pic: string;
+}
+const song: Ref<SongItem> = ref({
+  name: "",
+  s_singer: "",
+  s_al: "",
+  s_time: "",
+  id: 0,
+  al_pic: "",
+});
+
+const songIndex = ref(0);
 
 const audio: Ref<HTMLAudioElement> = ref(new Audio());
 //音量控制
@@ -81,12 +109,15 @@ function clickVolumeBar(e: MouseEvent) {
   if (position < 0) {
     position = 0;
   }
+  if (position !== 0) {
+    isVolume.value = true;
+  }
   volumeHeight.value = position + "px";
   audio.value.volume = position / volume.offsetHeight;
   currentVolume.value = audio.value.volume;
 }
+//音乐进度条控制
 const barWidth = ref("0");
-// const circleLeft = ref("");
 const currentTime = ref("00:00");
 function generateTime() {
   if (audio) {
@@ -130,9 +161,26 @@ function clickPlay() {
   console.log(isPlay.value);
 }
 
-function clickPrev() {}
+function changeSong() {
+  if (songIndex.value < 0) {
+    console.log("没有上一首");
+  } else if (songIndex.value > trackData.value.length) {
+    console.log("没有下一首");
+  } else {
+    song.value = trackData.value[songIndex.value];
+    emit("playSongChange", songIndex.value);
+  }
+}
 
-function clickNext() {}
+function clickPrev() {
+  songIndex.value--;
+  changeSong();
+}
+
+function clickNext() {
+  songIndex.value++;
+  changeSong();
+}
 
 function clickProgress(e: MouseEvent) {
   //e.offsetX就是相对于进度条起始点的偏移
@@ -152,36 +200,41 @@ function clickProgress(e: MouseEvent) {
   audio.value.play();
 }
 
-interface SongItem {
-  name: string;
-  s_singer: string;
-  s_al: string;
-  s_time: string;
-  id: number;
-  al_pic: string;
-}
-const song: Ref<SongItem> = ref({
-  name: "",
-  s_singer: "",
-  s_al: "",
-  s_time: "",
-  id: 0,
-  al_pic: "",
-});
-const { bus } = useEventsBus();
+const { emit, bus } = useEventsBus();
 const songUrl = ref("");
+function playSong() {
+  console.log("play");
+  if (song.value.id) {
+    audio.value.pause();
+    isPlay.value = false;
+  }
+  getSongUrl(song.value.id);
+}
+
 watch(
   () => bus.value.get("playSong"),
   (val) => {
+    songIndex.value = val[1];
     //切换，如果当前正在放歌就暂停
-    if (song.value.id) {
-      audio.value.pause();
-      isPlay.value = false;
-    }
     song.value = val[0];
-    getSongUrl(song.value.id);
+    playSong();
   }
 );
+
+//显示当前播放歌单
+const isShowTrack = ref(false);
+function showTrackList() {
+  isShowTrack.value = !isShowTrack.value;
+}
+
+const trackData: Ref<SongItem[]> = ref([]);
+watch(
+  () => bus.value.get("playTrack"),
+  (val) => {
+    trackData.value = val[0].tracks;
+  }
+);
+
 async function getSongUrl(sid: number) {
   const res = await getSongUrlApi(sid);
   songUrl.value = res.data[0].url;
@@ -320,6 +373,7 @@ async function getSongUrl(sid: number) {
         border-radius: 5px;
         background-color: #fff;
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+        z-index: 10;
         &::after {
           content: "";
           width: 10px;
@@ -345,6 +399,15 @@ async function getSongUrl(sid: number) {
           }
         }
       }
+    }
+    .trackList {
+      position: absolute;
+      height: 698px;
+      width: 450px;
+      box-shadow: -2px 0 4px -2px rgba(0, 0, 0, 0.3);
+      bottom: 100px;
+      right: 0;
+      background-color: #fff;
     }
   }
 }

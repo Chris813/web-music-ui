@@ -61,7 +61,9 @@
       >
     </div>
     <div class="content">
-      <KeepAlive><RouterView></RouterView></KeepAlive>
+      <KeepAlive
+        ><RouterView v-if="isData" :tracks="tableData"></RouterView
+      ></KeepAlive>
     </div>
   </div>
 </template>
@@ -72,7 +74,8 @@ import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlaylistDetailApi } from "@/api/info";
 import router from "@/router";
-import { formatDate, formatCount } from "@/utils/fommater";
+import { formatDate, formatCount, formatDuration } from "@/utils/fommater";
+import { getAllSongApi } from "@/api/info";
 const route = useRoute();
 
 interface songItem {
@@ -139,6 +142,49 @@ function handleSelect(index: number) {
     });
   }
 }
+
+interface SongItem {
+  name: string;
+  ar: { name: string; id: number }[];
+  al: { name: string; id: number; picUrl: string };
+  id: number;
+  dt: number;
+}
+interface TableItem {
+  name: string;
+  s_singer: string;
+  s_al: string;
+  s_time: string;
+  id: number;
+  al_pic: string;
+}
+const isData = ref(false);
+const tableData: Ref<TableItem[]> = ref([]);
+
+async function initTableData() {
+  let res = await getAllSongApi(Number(route.params.id));
+  console.log(res);
+  res.songs.forEach((item: SongItem, index: number) => {
+    const temp = {
+      name: item.name,
+      s_al: item.al.name,
+      s_time: formatDuration(item.dt),
+      s_singer: "",
+      id: item.id,
+      al_pic: item.al.picUrl,
+    };
+    //把每首歌曲的歌手名拼接成一个字符串
+    if (item.ar.length > 1) {
+      temp.s_singer = item.ar.map((item) => item.name).join("/");
+    } else {
+      temp.s_singer = item.ar[0].name;
+    }
+    tableData.value[index] = temp;
+  });
+  isData.value = true;
+}
+initTableData();
+
 onMounted(() => {
   getPlaylistDetail();
 });
