@@ -61,9 +61,7 @@
       >
     </div>
     <div class="content">
-      <KeepAlive
-        ><RouterView v-if="isData" :tracks="tableData"></RouterView
-      ></KeepAlive>
+      <KeepAlive><RouterView v-if="isData"></RouterView></KeepAlive>
     </div>
   </div>
 </template>
@@ -76,27 +74,11 @@ import { getPlaylistDetailApi } from "@/api/info";
 import router from "@/router";
 import { formatDate, formatCount, formatDuration } from "@/utils/fommater";
 import { getAllSongApi } from "@/api/info";
+import { SongOriginItem, SongTableItem, playlistItem } from "@/utils/types";
+import { useSongStore } from "@/stores/index";
 const route = useRoute();
+const songStore = useSongStore();
 
-interface songItem {
-  name: string;
-  ar: { name: string; id: number }[];
-  al: { name: string; id: number };
-  id: number;
-  dt: number;
-}
-
-interface playlistItem {
-  name: string;
-  coverImgUrl: string;
-  createTime: number;
-  trackCount: number;
-  subscribedCount: number;
-  description: string;
-  tags: string[];
-  tracks: songItem[];
-  playCount: number;
-}
 let pDetail: Ref<playlistItem> = ref({
   name: "",
   coverImgUrl: "",
@@ -116,8 +98,6 @@ async function getPlaylistDetail() {
   if (res.code === 200) {
     pDetail.value = res.playlist;
     loading.value = false;
-    // tracks.value = res.playlist.tracks;
-    // console.log(tracks.value);
   }
 }
 function toggleDes(event: Event) {
@@ -143,28 +123,13 @@ function handleSelect(index: number) {
   }
 }
 
-interface SongItem {
-  name: string;
-  ar: { name: string; id: number }[];
-  al: { name: string; id: number; picUrl: string };
-  id: number;
-  dt: number;
-}
-interface TableItem {
-  name: string;
-  s_singer: string;
-  s_al: string;
-  s_time: string;
-  id: number;
-  al_pic: string;
-}
 const isData = ref(false);
-const tableData: Ref<TableItem[]> = ref([]);
 
 async function initTableData() {
   let res = await getAllSongApi(Number(route.params.id));
+  songStore.songList = [];
   console.log(res);
-  res.songs.forEach((item: SongItem, index: number) => {
+  res.songs.forEach((item: SongOriginItem, index: number) => {
     const temp = {
       name: item.name,
       s_al: item.al.name,
@@ -179,7 +144,7 @@ async function initTableData() {
     } else {
       temp.s_singer = item.ar[0].name;
     }
-    tableData.value[index] = temp;
+    songStore.songList.push(temp);
   });
   isData.value = true;
 }

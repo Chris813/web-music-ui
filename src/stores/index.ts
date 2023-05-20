@@ -1,3 +1,4 @@
+import { SongTableItem } from "@/utils/types";
 import { defineStore } from "pinia";
 
 export const useSongStore = defineStore("config", {
@@ -5,7 +6,8 @@ export const useSongStore = defineStore("config", {
     return {
       // baseURL: "https://netease-cloud-music-api-eta-lovat.vercel.app/",
       songId: 0,
-      songList: [],
+      songList: [] as SongTableItem[],
+      currentSongList: [] as SongTableItem[],
     };
   },
 });

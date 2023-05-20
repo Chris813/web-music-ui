@@ -50,7 +50,7 @@
         class="trackList"
         :style="{ display: isShowTrack ? 'block' : 'none' }"
       >
-        <tracklist :tracks="trackData"></tracklist>
+        <tracklist :songId="song.id"></tracklist>
       </div>
     </div>
   </div>
@@ -61,16 +61,10 @@ import { getSongUrlApi } from "@/api/info";
 import { useEventsBus } from "@/utils/useEmitter";
 import { Ref, ref, watch } from "vue";
 import tracklist from "@/components/playlist/trackList.vue";
+import { SongTableItem } from "@/utils/types";
+import { useSongStore } from "@/stores";
 
-interface SongItem {
-  name: string;
-  s_singer: string;
-  s_al: string;
-  s_time: string;
-  id: number;
-  al_pic: string;
-}
-const song: Ref<SongItem> = ref({
+const song: Ref<SongTableItem> = ref({
   name: "",
   s_singer: "",
   s_al: "",
@@ -161,14 +155,16 @@ function clickPlay() {
   console.log(isPlay.value);
 }
 
+const songStore = useSongStore();
+//按钮上下切换歌曲
 function changeSong() {
   if (songIndex.value < 0) {
     console.log("没有上一首");
-  } else if (songIndex.value > trackData.value.length) {
+  } else if (songIndex.value > songStore.currentSongList.length) {
     console.log("没有下一首");
   } else {
-    song.value = trackData.value[songIndex.value];
-    emit("playSongChange", songIndex.value);
+    song.value = songStore.currentSongList[songIndex.value];
+    emit("playSongChange", song.value.id);
   }
 }
 
@@ -214,10 +210,21 @@ function playSong() {
 watch(
   () => bus.value.get("playSong"),
   (val) => {
-    songIndex.value = val[1];
-    //切换，如果当前正在放歌就暂停
-    song.value = val[0];
-    playSong();
+    if (!val[0]) {
+      console.log("歌单清空");
+      song.value = {} as SongTableItem;
+      songUrl.value = "";
+      audio.value.pause();
+      emit("playSongChange");
+    } else {
+      //index设置为当前正在播放的歌曲列表里的
+      songIndex.value = songStore.currentSongList.findIndex(
+        (item) => item.id === val[0].id
+      );
+      //切换，如果当前正在放歌就暂停
+      song.value = val[0];
+      playSong();
+    }
   }
 );
 
@@ -226,14 +233,6 @@ const isShowTrack = ref(false);
 function showTrackList() {
   isShowTrack.value = !isShowTrack.value;
 }
-
-const trackData: Ref<SongItem[]> = ref([]);
-watch(
-  () => bus.value.get("playTrack"),
-  (val) => {
-    trackData.value = val[0].tracks;
-  }
-);
 
 async function getSongUrl(sid: number) {
   const res = await getSongUrlApi(sid);
