@@ -43,8 +43,28 @@
           <i v-else class="iconfont icon-24gl-volumeCross"></i>
         </div>
       </div>
+      <div class="playSetting" @click="changePlaySetting">
+        <i
+          v-show="playSetting === 0"
+          class="iconfont icon-24gl-shuffle"
+          style="font-size: 25px"
+        ></i>
+        <i
+          v-show="playSetting === 1"
+          class="iconfont icon-icon-"
+          style="font-size: 30px"
+        ></i>
+        <i
+          v-show="playSetting === 2"
+          class="iconfont icon-hanhan-01-01"
+          style="font-size: 27px"
+        ></i>
+      </div>
       <div class="btn-tracklist" @click="showTrackList">
-        <i class="iconfont icon-musiclist"></i>
+        <i
+          class="iconfont icon-24gl-playlistMusic4"
+          style="font-size: 22px"
+        ></i>
       </div>
       <div
         class="trackList"
@@ -74,6 +94,30 @@ const song: Ref<SongTableItem> = ref({
 });
 
 const songIndex = ref(0);
+
+enum PlaySetting {
+  "suiji",
+  "liebiao",
+  "danqu",
+}
+const playSetting = ref(PlaySetting.suiji);
+function changePlaySetting() {
+  playSetting.value = (playSetting.value + 1) % 3;
+}
+
+function playBySetting() {
+  if (playSetting.value === 0) {
+    songIndex.value = Math.floor(
+      Math.random() * songStore.currentSongList.length
+    );
+    song.value = songStore.currentSongList[songIndex.value];
+    emit("playSongChange", song.value.id);
+  } else if (playSetting.value === 1) {
+    clickNext();
+  } else {
+    audio.value.play();
+  }
+}
 
 const audio: Ref<HTMLAudioElement> = ref(new Audio());
 //音量控制
@@ -136,6 +180,9 @@ function resetAudio() {
     };
     audio.value.onloadedmetadata = () => {
       generateTime();
+    };
+    audio.value.onended = () => {
+      playBySetting();
     };
   }
   setTimeout(clickPlay, 200);
@@ -340,13 +387,15 @@ async function getSongUrl(sid: number) {
     display: flex;
     padding-left: 200px;
     align-items: center;
+    & > div {
+      padding-right: 15px;
+    }
     .iconfont {
       font-size: 32px;
       color: #71829e;
     }
     .volume,
     .shoucang {
-      padding-right: 10px;
       .iconfont {
         font-size: 26px;
       }

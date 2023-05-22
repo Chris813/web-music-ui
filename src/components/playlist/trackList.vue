@@ -26,9 +26,13 @@
             </span>
             <span class="singer"> - {{ item.s_singer }}</span>
           </div>
-
-          <div class="delete" @click="deleteSong(index)">
-            <i class="iconfont icon-shanchu2"></i>
+          <div class="list-btn">
+            <div class="link">
+              <i class="iconfont icon-24gl-link"></i>
+            </div>
+            <div class="delete" @click="deleteSong(index)">
+              <i class="iconfont icon-shanchu2"></i>
+            </div>
           </div>
         </div>
       </li>
@@ -129,6 +133,15 @@ function clearList() {
             color: #999ea5;
           }
         }
+        .list-btn {
+          display: flex;
+          & > div {
+            padding-right: 10px;
+          }
+          .link {
+            opacity: 0;
+          }
+        }
       }
       &.selected {
         .text {
@@ -136,6 +149,9 @@ function clearList() {
           .singer {
             color: red;
           }
+        }
+        .link {
+          opacity: 1 !important;
         }
       }
     }

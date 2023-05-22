@@ -31,7 +31,7 @@
           <div class="create">
             <span class="c-time">{{ formatDate(pDetail.createTime) }}创建</span>
           </div>
-          <div class="btn"></div>
+
           <div class="tags">
             <div class="tag" v-for="(item, index) in pDetail.tags" :key="index">
               <a href="#">{{ item }}</a>
@@ -44,6 +44,15 @@
           <div class="p-des">
             <div class="des">简介：{{ pDetail.description }}</div>
             <div class="toggle-button" @click="toggleDes"></div>
+          </div>
+          <div class="btn">
+            <div class="play" @click="playTrack">
+              <i class="iconfont icon-24gf-play"></i>播放
+            </div>
+            <div class="like"><i class="iconfont icon-jushoucang"></i></div>
+            <div class="add" @click="addToPlayList">
+              <i class="iconfont icon-jiaru"></i>
+            </div>
           </div>
         </div>
       </template>
@@ -76,6 +85,7 @@ import { formatDate, formatCount, formatDuration } from "@/utils/fommater";
 import { getAllSongApi } from "@/api/info";
 import { SongOriginItem, SongTableItem, playlistItem } from "@/utils/types";
 import { useSongStore } from "@/stores/index";
+import { useEventsBus } from "@/utils/useEmitter";
 const route = useRoute();
 const songStore = useSongStore();
 
@@ -121,6 +131,15 @@ function handleSelect(index: number) {
       params: { id: route.params.id },
     });
   }
+}
+const { emit } = useEventsBus();
+// 播放当前歌单 把当前歌单的第一首歌的id传到“playSongChange”事件中
+function playTrack() {
+  emit("playSongChange", songStore.songList[0].id);
+}
+//将当前歌单歌曲加入播放列表中
+function addToPlayList() {
+  songStore.currentSongList.push(...songStore.songList);
 }
 
 const isData = ref(false);
@@ -233,6 +252,21 @@ onMounted(() => {
           transform: rotate(180deg);
           transform-origin: center;
         }
+      }
+    }
+    .btn {
+      padding-top: 15px;
+      display: flex;
+      & > div {
+        border-radius: 5px;
+        margin-right: 10px;
+        cursor: pointer;
+        padding: 6px 10px;
+        background-color: #f7f8f9;
+      }
+      .play {
+        color: rgb(232, 39, 90);
+        background-color: rgb(253, 240, 235);
       }
     }
   }

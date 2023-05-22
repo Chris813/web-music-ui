@@ -79,9 +79,16 @@ watch(
   () => bus.value.get("playSongChange"),
   (val) => {
     if (val[0]) {
-      const index = songStore.songList.findIndex((item) => item.id == val[0]);
+      let index = songStore.songList.findIndex((item) => item.id == val[0]);
       console.log(index);
-      setCurrent(songStore.songList[index]);
+      if (index !== -1) {
+        setCurrent(songStore.songList[index]);
+      } else {
+        index = songStore.currentSongList.findIndex(
+          (item) => item.id == val[0]
+        );
+        emit("playSong", songStore.currentSongList[index]);
+      }
     } else {
       setCurrent();
     }

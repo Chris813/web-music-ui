@@ -86,11 +86,11 @@ button:focus-visible {
 
 @font-face {
   font-family: "iconfont"; /* Project id 4046343 */
-  src: url("//at.alicdn.com/t/c/font_4046343_jtbpbi1gbn.woff2?t=1684504009304")
+  src: url("//at.alicdn.com/t/c/font_4046343_5rzjqawrw5h.woff2?t=1684770598052")
       format("woff2"),
-    url("//at.alicdn.com/t/c/font_4046343_jtbpbi1gbn.woff?t=1684504009304")
+    url("//at.alicdn.com/t/c/font_4046343_5rzjqawrw5h.woff?t=1684770598052")
       format("woff"),
-    url("//at.alicdn.com/t/c/font_4046343_jtbpbi1gbn.ttf?t=1684504009304")
+    url("//at.alicdn.com/t/c/font_4046343_5rzjqawrw5h.ttf?t=1684770598052")
       format("truetype");
 }
 
@@ -100,6 +100,34 @@ button:focus-visible {
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-24gl-link:before {
+  content: "\eb05";
+}
+
+.icon-jiaru:before {
+  content: "\e62b";
+}
+
+.icon-24gf-play:before {
+  content: "\ea83";
+}
+
+.icon-24gl-playlistMusic4:before {
+  content: "\ea72";
+}
+
+.icon-icon-:before {
+  content: "\e649";
+}
+
+.icon-24gl-shuffle:before {
+  content: "\ea75";
+}
+
+.icon-hanhan-01-01:before {
+  content: "\e6ae";
 }
 
 .icon-shanchu2:before {
@@ -116,10 +144,6 @@ button:focus-visible {
 
 .icon-24gl-volumeCross:before {
   content: "\ea0b";
-}
-
-.icon-musiclist:before {
-  content: "\e69c";
 }
 
 .icon-shangyishou:before {
