@@ -11,12 +11,21 @@
       >
     </div>
     <div class="search-bar">
-      <input type="text" placeholder="搜索" />
+      <input
+        type="text"
+        placeholder="搜索"
+        v-model="keyword"
+        @keydown.enter="search"
+      />
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+import { getSearchDataApi } from "@/api/info";
+import { useSongStore } from "@/stores";
+import { formatSongData } from "@/utils/fommater";
+import { useEventsBus } from "@/utils/useEmitter";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -28,15 +37,34 @@ type menuItem = {
 const menuList: menuItem[] = [
   { title: "推荐", name: "recommend" },
   { title: "歌单", name: "playlist" },
-  { title: "电台", name: "radio" },
+  { title: "搜索", name: "search" },
   { title: "排行榜", name: "rank" },
   { title: "新歌", name: "newSong" },
 ];
+const { emit } = useEventsBus();
+const songStore = useSongStore();
 function handleSelect(index: number) {
   activeIndex.value = index;
   router.push({
     name: menuList[index].name,
   });
+}
+const keyword = ref("");
+async function initSearchData(keyword: string) {
+  console.log("initsearch");
+  const res = await getSearchDataApi(keyword);
+  formatSongData(res.result.songs, songStore.searchSongList);
+}
+function search() {
+  songStore.searchSongList = [];
+  initSearchData(keyword.value);
+  router.push({
+    name: "search",
+    query: {
+      keyword: keyword.value,
+    },
+  });
+  keyword.value = "";
 }
 </script>
 

@@ -70,7 +70,9 @@
       >
     </div>
     <div class="content">
-      <KeepAlive><RouterView v-if="isData"></RouterView></KeepAlive>
+      <KeepAlive
+        ><RouterView v-if="isData" trackType="gedan"></RouterView
+      ></KeepAlive>
     </div>
   </div>
 </template>
@@ -81,7 +83,12 @@ import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlaylistDetailApi } from "@/api/info";
 import router from "@/router";
-import { formatDate, formatCount, formatDuration } from "@/utils/fommater";
+import {
+  formatDate,
+  formatCount,
+  formatDuration,
+  formatSongData,
+} from "@/utils/fommater";
 import { getAllSongApi } from "@/api/info";
 import { SongOriginItem, SongTableItem, playlistItem } from "@/utils/types";
 import { useSongStore } from "@/stores/index";
@@ -148,23 +155,7 @@ async function initTableData() {
   let res = await getAllSongApi(Number(route.params.id));
   songStore.songList = [];
   console.log(res);
-  res.songs.forEach((item: SongOriginItem, index: number) => {
-    const temp = {
-      name: item.name,
-      s_al: item.al.name,
-      s_time: formatDuration(item.dt),
-      s_singer: "",
-      id: item.id,
-      al_pic: item.al.picUrl,
-    };
-    //把每首歌曲的歌手名拼接成一个字符串
-    if (item.ar.length > 1) {
-      temp.s_singer = item.ar.map((item) => item.name).join("/");
-    } else {
-      temp.s_singer = item.ar[0].name;
-    }
-    songStore.songList.push(temp);
-  });
+  formatSongData(res.songs, songStore.songList);
   isData.value = true;
 }
 initTableData();

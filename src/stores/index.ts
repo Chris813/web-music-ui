@@ -8,6 +8,7 @@ export const useSongStore = defineStore("config", {
       songId: 0,
       songList: [] as SongTableItem[],
       currentSongList: [] as SongTableItem[],
+      searchSongList: [] as SongTableItem[],
     };
   },
 });

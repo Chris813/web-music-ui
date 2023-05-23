@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
           },
         ],
       },
+      {
+        path: "search",
+        name: "search",
+        component: () => import("@/pages/search.vue"),
+      },
     ],
   },
 ];

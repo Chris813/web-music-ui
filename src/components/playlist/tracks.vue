@@ -1,17 +1,18 @@
 <template>
   <el-table
-    :data="songStore.songList"
+    :data="tableData"
     ref="singleTableRef"
     highlight-current-row
     @current-change="handleCurrentChange"
     stripe
     style="width: 100%"
+    empty-text="正在获取数据..."
   >
     <el-table-column prop="name" label="歌曲名" width="280" />
     <el-table-column prop="s_singer" label="歌手" width="220" />
     <el-table-column prop="s_al" label="专辑名" width="230" />
     <el-table-column prop="s_time" label="时间" width="230" />
-    <el-table-column label="操作" width="230">
+    <el-table-column label="操作" width="210">
       <template #default="scope">
         <div class="btn">
           <svg
@@ -56,7 +57,7 @@ import { useSongStore } from "@/stores";
 import { SongTableItem } from "@/utils/types";
 import { useEventsBus } from "@/utils/useEmitter";
 import { ElTable } from "element-plus";
-import { Ref, ref, watch } from "vue";
+import { Ref, computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
@@ -124,9 +125,28 @@ const handleCurrentChange = (val: SongTableItem | undefined) => {
 };
 
 const songStore = useSongStore();
+interface Prop {
+  trackType: string;
+}
+const props = defineProps<Prop>();
+console.log(props.trackType);
+const tableData = computed(() => {
+  if (props.trackType === "gedan") {
+    return songStore.songList;
+  } else if (props.trackType === "search") {
+    return songStore.searchSongList;
+  }
+});
 </script>
 
 <style scoped lang="scss">
+.el-table {
+  .el-table-column {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 .btn {
   display: flex;
 

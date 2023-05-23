@@ -46,3 +46,20 @@ export function getAllSongApi(pid: number, limit: number = 20) {
     },
   });
 }
+
+export function getSearchDataApi(
+  keyword: string,
+  type: number = 1,
+  limit: number = 30,
+  offset: number = 0
+) {
+  return request({
+    url: "/cloudsearch",
+    params: {
+      keywords: keyword,
+      type: type,
+      limit: limit,
+      offset: offset,
+    },
+  });
+}
