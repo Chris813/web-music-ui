@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { getSearchDataApi } from "@/api/info";
-import { Ref, ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import tracks from "@components/playlist/tracks.vue";
 import { formatSongData } from "@/utils/fommater";
@@ -38,21 +38,32 @@ const snav = [
   { title: "艺人", currentCom: "artist" },
   { title: "歌单", currentCom: "songlist" },
 ];
-
+async function initSearchData(keyword: string, type: number = 1) {
+  songStore.searchSongList = [];
+  const res = await getSearchDataApi(keyword);
+  formatSongData(res.result.songs, songStore.searchSongList);
+}
 const activeIndex = ref(0);
 function handleSelect(index: number) {
   activeIndex.value = index;
   console.log(snav[activeIndex.value].currentCom);
 }
 
-const keyword = ref("");
-keyword.value = route.query.keyword as string;
-
-// watch(route, () => {
-//   console.log(route.query.keyword);
-//   initSearchData();
-// });
-// initSearchData();
+onMounted(() => {
+  watch(
+    () => route.query.keyword,
+    (newval, oldval) => {
+      if (!newval) {
+        initSearchData(oldval as string);
+      } else {
+        if (newval !== oldval) {
+          initSearchData(newval as string);
+        }
+      }
+    }
+  );
+  initSearchData(route.query.keyword as string);
+});
 </script>
 
 <style scoped lang="scss">

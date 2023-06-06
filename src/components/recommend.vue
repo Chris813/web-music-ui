@@ -124,9 +124,6 @@ getPlaylist();
       }
       margin-right: 15px;
       margin-bottom: 30px;
-      .el-card {
-        border: none;
-      }
       .p-count {
         position: absolute;
         right: 0;

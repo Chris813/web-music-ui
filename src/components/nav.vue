@@ -26,7 +26,7 @@ import { getSearchDataApi } from "@/api/info";
 import { useSongStore } from "@/stores";
 import { formatSongData } from "@/utils/fommater";
 import { useEventsBus } from "@/utils/useEmitter";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let activeIndex = ref(0);
@@ -50,20 +50,19 @@ function handleSelect(index: number) {
   });
 }
 const keyword = ref("");
-async function initSearchData(keyword: string) {
-  console.log("initsearch");
-  const res = await getSearchDataApi(keyword);
-  formatSongData(res.result.songs, songStore.searchSongList);
-}
+
 function search() {
-  songStore.searchSongList = [];
-  initSearchData(keyword.value);
+  console.log("跳转页面");
+
   router.push({
     name: "search",
     query: {
       keyword: keyword.value,
     },
   });
+  // emit("search", keyword.value);
+  // console.log("事件触发");
+
   keyword.value = "";
 }
 </script>
