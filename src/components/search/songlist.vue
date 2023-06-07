@@ -58,9 +58,7 @@ import { SongTableItem } from "@/utils/types";
 import { useEventsBus } from "@/utils/useEmitter";
 import { ElTable } from "element-plus";
 import { Ref, computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 
-const route = useRoute();
 const currentRow: Ref<SongTableItem> = ref({
   name: "",
   s_singer: "",
@@ -70,70 +68,58 @@ const currentRow: Ref<SongTableItem> = ref({
   al_pic: "",
 });
 const singleTableRef = ref<InstanceType<typeof ElTable>>();
-const playId = ref(0);
 const { emit, bus } = useEventsBus();
 //监听是否有切换歌曲
 const setCurrent = (row?: SongTableItem) => {
   singleTableRef.value!.setCurrentRow(row);
 };
-watch(
-  () => bus.value.get("playSongChange"),
-  (val) => {
-    if (val[0]) {
-      let index = songStore.songList.findIndex((item) => item.id == val[0]);
-      console.log(index);
-      if (index !== -1) {
-        setCurrent(songStore.songList[index]);
-      } else {
-        index = songStore.currentSongList.findIndex(
-          (item) => item.id == val[0]
-        );
-        emit("playSong", songStore.currentSongList[index]);
-      }
-    } else {
-      setCurrent();
-    }
-  }
-);
+// watch(
+//   () => bus.value.get("playSongChange"),
+//   (val) => {
+//     if (val[0]) {
+//       let index = songStore.songList.findIndex((item) => item.id == val[0]);
+//       console.log(index);
+//       if (index !== -1) {
+//         setCurrent(songStore.songList[index]);
+//       } else {
+//         index = songStore.currentSongList.findIndex(
+//           (item) => item.id == val[0]
+//         );
+//         emit("playSong", songStore.currentSongList[index]);
+//       }
+//     } else {
+//       setCurrent();
+//     }
+//   }
+// );
 //当前列表点击不同行触发音乐播放组件播放歌曲，并且记录歌曲id。
 const handleCurrentChange = (val: SongTableItem | undefined) => {
   if (val) {
     currentRow.value = val;
-    emit("playSong", currentRow.value);
-    //当前播放列表为空或者换了新的歌单播放
-    if (
-      songStore.currentSongList.length === 0 ||
-      !songStore.currentSongList.includes(currentRow.value)
-    ) {
-      songStore.currentSongList = [];
-      songStore.currentSongList.push(...songStore.songList);
-    }
+    emit("addCurrentSongList", val);
+    // emit("playSong", currentRow.value);
+    console.log(songStore.currentSongList.length);
   }
-
-  // let newTrack = {
-  //   id: route.params.id,
-  //   tracks: tableData.value,
-  // };
-  // //在没有歌单列表时或者有新歌单时触发
-  // if (bus.value.get("playTrack")) {
-  //   let trackCache = bus.value.get("playTrack");
-  //   if (route.params.id != trackCache[0].id) {
-  //     emit("playTrack", newTrack);
-  //   }
-  // } else {
-  //   emit("playTrack", newTrack);
-  // }
 };
 
 const songStore = useSongStore();
 
 const tableData = computed(() => {
-  if (songStore.songList.length === 0) {
+  if (songStore.searchSongList.length === 0) {
     return [];
   } else {
-    return songStore.songList;
+    return songStore.searchSongList;
   }
 });
+// watch(
+//   () => songStore.searchSongList,
+//   (val) => {
+//     console.log(val.length);
+//     if (val.length === 0) {
+//       tableData.value = [];
+//     }
+//   }
+// );
 </script>
 
 <style scoped lang="scss">

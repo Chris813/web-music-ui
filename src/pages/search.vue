@@ -13,10 +13,7 @@
       </div>
     </div>
     <div class="s-content">
-      <component
-        :is="snav[activeIndex].currentCom"
-        track-type="search"
-      ></component>
+      <component :is="snav[activeIndex].currentCom"></component>
       <!-- <tracks ></tracks> -->
     </div>
   </div>
@@ -26,14 +23,13 @@
 import { getSearchDataApi } from "@/api/info";
 import { ref, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import tracks from "@components/playlist/tracks.vue";
+import songlist from "@components/search/songlist.vue";
 import { formatSongData } from "@/utils/fommater";
 import { useSongStore } from "@/stores";
-import { useEventsBus } from "@/utils/useEmitter";
 const route = useRoute();
 const songStore = useSongStore();
 const snav = [
-  { title: "单曲", currentCom: tracks },
+  { title: "单曲", currentCom: songlist },
   { title: "专辑", currentCom: "album" },
   { title: "艺人", currentCom: "artist" },
   { title: "歌单", currentCom: "songlist" },
@@ -42,6 +38,7 @@ async function initSearchData(keyword: string, type: number = 1) {
   songStore.searchSongList = [];
   const res = await getSearchDataApi(keyword);
   formatSongData(res.result.songs, songStore.searchSongList);
+  console.log(songStore.searchSongList);
 }
 const activeIndex = ref(0);
 function handleSelect(index: number) {
@@ -53,15 +50,19 @@ onMounted(() => {
   watch(
     () => route.query.keyword,
     (newval, oldval) => {
+      console.log(newval, oldval);
       if (!newval) {
+        console.log("新搜索");
         initSearchData(oldval as string);
       } else {
         if (newval !== oldval) {
+          console.log("新搜索");
           initSearchData(newval as string);
         }
       }
     }
   );
+  console.log("新搜索");
   initSearchData(route.query.keyword as string);
 });
 </script>

@@ -41,8 +41,6 @@ const menuList: menuItem[] = [
   { title: "排行榜", name: "rank" },
   { title: "新歌", name: "newSong" },
 ];
-const { emit } = useEventsBus();
-const songStore = useSongStore();
 function handleSelect(index: number) {
   activeIndex.value = index;
   router.push({
@@ -53,7 +51,7 @@ const keyword = ref("");
 
 function search() {
   console.log("跳转页面");
-
+  activeIndex.value = 2;
   router.push({
     name: "search",
     query: {

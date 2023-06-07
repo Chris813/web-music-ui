@@ -43,12 +43,13 @@
 <script setup lang="ts">
 import { useSongStore } from "@/stores";
 import { useEventsBus } from "@/utils/useEmitter";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 const songStore = useSongStore();
 
 interface Prop {
   songId: number;
 }
+
 const props = defineProps<Prop>();
 console.log(`songid:${props.songId}`);
 const songIndex = computed(() => {
@@ -60,22 +61,36 @@ const songIndex = computed(() => {
   console.log(index);
   return index;
 });
-const { emit } = useEventsBus();
+
+const { emit, bus } = useEventsBus();
 function playSongFromList(index: number) {
   emit("playSongChange", songStore.currentSongList[index].id);
   console.log(songIndex);
 }
 
 function deleteSong(index: number) {
+  console.log(index);
   songStore.currentSongList.splice(index, 1);
+  console.log(index);
   console.log(songStore.currentSongList[index].id);
   emit("playSongChange", songStore.currentSongList[index].id);
+  emit("playSong", false);
 }
 
 function clearList() {
   songStore.currentSongList = [];
   emit("playSong", false);
 }
+
+//播放搜索歌曲加入当前播放列表
+
+watch(
+  () => bus.value.get("addCurrentSongList"),
+  (val) => {
+    songStore.currentSongList.splice(songIndex.value + 1, 0, val[0]);
+    emit("playSong", val[0]);
+  }
+);
 </script>
 
 <style scoped lang="scss">

@@ -70,9 +70,7 @@
       >
     </div>
     <div class="content">
-      <KeepAlive
-        ><RouterView v-if="isData" trackType="gedan"></RouterView
-      ></KeepAlive>
+      <KeepAlive><RouterView v-if="isData"></RouterView></KeepAlive>
     </div>
   </div>
 </template>
