@@ -54,13 +54,11 @@
 
 <script setup lang="ts">
 import { useSongStore } from "@/stores";
-import { SongTableItem } from "@/utils/types";
+import { SongTableItem, songOrigin } from "@/utils/types";
 import { useEventsBus } from "@/utils/useEmitter";
 import { ElTable } from "element-plus";
 import { Ref, computed, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 
-const route = useRoute();
 const currentRow: Ref<SongTableItem> = ref({
   name: "",
   s_singer: "",
@@ -70,7 +68,6 @@ const currentRow: Ref<SongTableItem> = ref({
   al_pic: "",
 });
 const singleTableRef = ref<InstanceType<typeof ElTable>>();
-const playId = ref(0);
 const { emit, bus } = useEventsBus();
 //监听是否有切换歌曲
 const setCurrent = (row?: SongTableItem) => {
@@ -81,32 +78,38 @@ watch(
   (val) => {
     if (val[0]) {
       let index = songStore.songList.findIndex((item) => item.id == val[0]);
-      console.log(index);
       if (index !== -1) {
         setCurrent(songStore.songList[index]);
-      } else {
-        index = songStore.currentSongList.findIndex(
-          (item) => item.id == val[0]
-        );
-        emit("playSong", songStore.currentSongList[index]);
       }
+      //歌单里找不到说明歌曲在播放列表中，不需要从歌单这边绕一圈触发播放
+      // } else {
+      //   index = songStore.currentSongList.findIndex(
+      //     (item) => item.id == val[0]
+      //   );
+      //   emit("playSong", songStore.currentSongList[index]);
+      // }
     } else {
       setCurrent();
     }
   }
 );
-//当前列表点击不同行触发音乐播放组件播放歌曲，并且记录歌曲id。
+
+//当前列表点击不同行触发音乐播放组件播放歌曲，并且记录歌曲id。高亮行与当前播放歌不同才从歌单触发播放
 const handleCurrentChange = (val: SongTableItem | undefined) => {
-  if (val) {
-    currentRow.value = val;
-    emit("playSong", currentRow.value);
-    //当前播放列表为空或者换了新的歌单播放
-    if (
-      songStore.currentSongList.length === 0 ||
-      !songStore.currentSongList.includes(currentRow.value)
-    ) {
-      songStore.currentSongList = [];
-      songStore.currentSongList.push(...songStore.songList);
+  if (val !== songStore.currentPlaySong.song) {
+    if (val) {
+      currentRow.value = val;
+      songStore.currentPlaySong.origin = songOrigin.SongList;
+      songStore.currentPlaySong.song = currentRow.value;
+      emit("playSong", currentRow.value.id);
+      //当前播放列表为空或者换了新的歌单播放
+      if (
+        songStore.currentSongList.length === 0 ||
+        !songStore.currentSongList.includes(currentRow.value)
+      ) {
+        songStore.currentSongList = [];
+        songStore.currentSongList.push(...songStore.songList);
+      }
     }
   }
 

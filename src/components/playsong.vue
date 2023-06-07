@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper" v-if="songUrl">
     <div class="info">
-      <img :src="song.al_pic" alt="" />
+      <img :src="currentPlaySong.song.al_pic" alt="" />
       <div class="text">
-        <span class="name">{{ song.name }}</span
-        ><span class="artist"> - {{ song.s_singer }}</span>
+        <span class="name">{{ currentPlaySong.song.name }}</span
+        ><span class="artist"> - {{ currentPlaySong.song.s_singer }}</span>
       </div>
     </div>
     <div class="control">
@@ -22,8 +22,8 @@
       </div>
     </div>
     <div class="progress">
-      <span class="time" v-if="song.id"
-        >{{ currentTime }}/{{ song.s_time }}</span
+      <span class="time" v-if="currentPlaySong.song.id"
+        >{{ currentTime }}/{{ currentPlaySong.song.s_time }}</span
       >
       <div class="progress-bar" @click="clickProgress">
         <div class="pro-btn" :style="{ left: barWidth }"></div>
@@ -70,7 +70,7 @@
         class="trackList"
         :style="{ display: isShowTrack ? 'block' : 'none' }"
       >
-        <tracklist :songId="song.id"></tracklist>
+        <tracklist></tracklist>
       </div>
     </div>
   </div>
@@ -83,6 +83,7 @@ import { Ref, ref, watch } from "vue";
 import tracklist from "@/components/playlist/trackList.vue";
 import { SongTableItem } from "@/utils/types";
 import { useSongStore } from "@/stores";
+import { storeToRefs } from "pinia";
 
 const song: Ref<SongTableItem> = ref({
   name: "",
@@ -110,8 +111,12 @@ function playBySetting() {
     songIndex.value = Math.floor(
       Math.random() * songStore.currentSongList.length
     );
-    song.value = songStore.currentSongList[songIndex.value];
-    emit("playSongChange", song.value.id);
+    songStore.updateCurrentPlaySong(
+      2,
+      songStore.currentSongList[songIndex.value]
+    );
+    emit("playSongChange", songStore.currentPlaySong.song.id);
+    playSong(songStore.currentPlaySong.song.id);
   } else if (playSetting.value === 1) {
     clickNext();
   } else {
@@ -203,6 +208,7 @@ function clickPlay() {
 }
 
 const songStore = useSongStore();
+const { currentPlaySong } = storeToRefs(songStore);
 //按钮上下切换歌曲
 function changeSong() {
   if (songIndex.value < 0) {
@@ -210,8 +216,13 @@ function changeSong() {
   } else if (songIndex.value > songStore.currentSongList.length) {
     console.log("没有下一首");
   } else {
-    song.value = songStore.currentSongList[songIndex.value];
-    emit("playSongChange", song.value.id);
+    songStore.updateCurrentPlaySong(
+      2,
+      songStore.currentSongList[songIndex.value]
+    );
+
+    emit("playSongChange", songStore.currentPlaySong.song.id);
+    playSong(songStore.currentPlaySong.song.id);
   }
 }
 
@@ -245,32 +256,37 @@ function clickProgress(e: MouseEvent) {
 
 const { emit, bus } = useEventsBus();
 const songUrl = ref("");
-function playSong() {
-  console.log("play");
-  if (song.value.id) {
+function playSong(songId: number) {
+  console.log("歌曲点击播放");
+  songIndex.value = songStore.currentSongList.findIndex(
+    (item) => item.id === songId
+  );
+  //切换，如果当前正在放歌就暂停
+  // song.value = val[0];
+  if (songId) {
+    console.log("当前歌曲暂停");
     audio.value.pause();
     isPlay.value = false;
   }
-  getSongUrl(song.value.id);
+  getSongUrl(songId);
 }
 
 watch(
   () => bus.value.get("playSong"),
   (val) => {
-    if (!val[0]) {
-      console.log("歌单清空");
-      song.value = {} as SongTableItem;
-      songUrl.value = "";
-      audio.value.pause();
-      emit("playSongChange");
+    //从歌单列表中删除歌曲
+    if (!val) {
+      console.log("当前播放歌曲被删除");
+      //删除后列表中没有歌曲了
+      if (songStore.currentSongList.length === 0) {
+        console.log("播放列表为空");
+        songUrl.value = "";
+        audio.value.pause();
+      }
     } else {
       //index设置为当前正在播放的歌曲列表里的
-      songIndex.value = songStore.currentSongList.findIndex(
-        (item) => item.id === val[0].id
-      );
-      //切换，如果当前正在放歌就暂停
-      song.value = val[0];
-      playSong();
+
+      playSong(currentPlaySong.value.song.id);
     }
   }
 );

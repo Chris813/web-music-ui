@@ -30,7 +30,7 @@
             <div class="link">
               <i class="iconfont icon-24gl-link"></i>
             </div>
-            <div class="delete" @click="deleteSong(index)">
+            <div class="delete" @click.stop="deleteSong(index)">
               <i class="iconfont icon-shanchu2"></i>
             </div>
           </div>
@@ -43,38 +43,46 @@
 <script setup lang="ts">
 import { useSongStore } from "@/stores";
 import { useEventsBus } from "@/utils/useEmitter";
+import { storeToRefs } from "pinia";
 import { computed, watch } from "vue";
 const songStore = useSongStore();
 
-interface Prop {
-  songId: number;
-}
-
-const props = defineProps<Prop>();
-console.log(`songid:${props.songId}`);
+const { currentPlaySong } = storeToRefs(useSongStore());
 const songIndex = computed(() => {
-  console.log(props.songId);
-  console.log(songStore.currentSongList);
   const index = songStore.currentSongList.findIndex(
-    (item) => item.id === props.songId
+    (item) => item.id === currentPlaySong.value.song.id
   );
-  console.log(index);
   return index;
 });
 
 const { emit, bus } = useEventsBus();
 function playSongFromList(index: number) {
-  emit("playSongChange", songStore.currentSongList[index].id);
-  console.log(songIndex);
+  songStore.updateCurrentPlaySong(2, songStore.currentSongList[index]);
+  emit("playSongChange", currentPlaySong.value.song.id);
+  emit("playSong", currentPlaySong.value.song.id);
 }
 
 function deleteSong(index: number) {
   console.log(index);
-  songStore.currentSongList.splice(index, 1);
-  console.log(index);
-  console.log(songStore.currentSongList[index].id);
-  emit("playSongChange", songStore.currentSongList[index].id);
-  emit("playSong", false);
+  let newCurrentSongList = [...songStore.currentSongList];
+
+  console.log(songStore.currentSongList.length);
+  console.log(newCurrentSongList);
+  newCurrentSongList.splice(index, 1);
+  songStore.currentSongList = newCurrentSongList;
+  console.log(songStore.currentSongList[index].name);
+  console.log(songIndex.value);
+  if (songIndex.value === -1) {
+    console.log("切换歌曲");
+    if (songStore.currentSongList.length === 0) {
+      songStore.updateCurrentPlaySong(0);
+      emit("playSongChange", false);
+    } else {
+      songStore.updateCurrentPlaySong(2, songStore.currentSongList[index]);
+      emit("playSongChange", currentPlaySong.value.song.id);
+      emit("playSong", currentPlaySong.value.song.id);
+    }
+  }
 }
 
 function clearList() {
@@ -88,7 +96,8 @@ watch(
   () => bus.value.get("addCurrentSongList"),
   (val) => {
     songStore.currentSongList.splice(songIndex.value + 1, 0, val[0]);
-    emit("playSong", val[0]);
+    songStore.updateCurrentPlaySong(3, val[0]);
+    emit("playSong", currentPlaySong.value.song.id);
   }
 );
 </script>

@@ -33,3 +33,11 @@ export interface playlistItem {
   tracks: SongOriginItem[];
   playCount: number;
 }
+
+//歌曲来源
+export enum songOrigin {
+  NoSong,
+  SongList,
+  currentSongList,
+  SearchSongList,
+}
