@@ -120,11 +120,7 @@ function toggleDes(event: Event) {
   btn.classList.toggle("expanded");
   btn.parentElement?.children[0].classList.toggle("expanded");
 }
-const playNav = [
-  { title: "歌曲列表", name: "tracks" },
-  { title: "评论", name: "comments" },
-  { title: "收藏者", name: "subscribers" },
-];
+const playNav = [{ title: "歌曲列表", name: "tracks" }];
 let activeIndex = ref(0);
 function handleSelect(index: number) {
   console.log(index);

@@ -21,20 +21,24 @@
 
 <script setup lang="ts">
 import { getSearchDataApi } from "@/api/info";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, provide } from "vue";
 import { useRoute } from "vue-router";
 import songlist from "@components/search/songlist.vue";
 import { formatSongData } from "@/utils/fommater";
 import { useSongStore } from "@/stores";
+import AlbumList from "@/components/search/albumList.vue";
+import ArtistList from "@/components/search/artistList.vue";
+import PlayList from "@/components/search/playList.vue";
 const route = useRoute();
 const songStore = useSongStore();
 const snav = [
   { title: "单曲", currentCom: songlist },
-  { title: "专辑", currentCom: "album" },
-  { title: "艺人", currentCom: "artist" },
-  { title: "歌单", currentCom: "songlist" },
+  { title: "专辑", currentCom: AlbumList },
+  { title: "艺人", currentCom: ArtistList },
+  { title: "歌单", currentCom: PlayList },
 ];
 async function initSearchData(keyword: string, type: number = 1) {
+  provide("keyword", keyword);
   songStore.searchSongList = [];
   const res = await getSearchDataApi(keyword);
   formatSongData(res.result.songs, songStore.searchSongList);

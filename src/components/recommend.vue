@@ -112,8 +112,8 @@ getPlaylist();
   .p-body {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding-top: 30px;
     .p-item {
       position: relative;

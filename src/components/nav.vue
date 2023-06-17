@@ -22,12 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { getSearchDataApi } from "@/api/info";
-import { useSongStore } from "@/stores";
-import { formatSongData } from "@/utils/fommater";
-import { useEventsBus } from "@/utils/useEmitter";
-import { nextTick, ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 let activeIndex = ref(0);
 type menuItem = {
@@ -38,8 +34,7 @@ const menuList: menuItem[] = [
   { title: "推荐", name: "recommend" },
   { title: "歌单", name: "playlist" },
   { title: "搜索", name: "search" },
-  { title: "排行榜", name: "rank" },
-  { title: "新歌", name: "newSong" },
+  { title: "Mv", name: "mv" },
 ];
 function handleSelect(index: number) {
   activeIndex.value = index;
@@ -48,7 +43,17 @@ function handleSelect(index: number) {
   });
 }
 const keyword = ref("");
-
+const route = useRoute();
+console.log(route.name);
+watch(
+  () => route.name,
+  (val) => {
+    console.log(val);
+    if (val === "tracks") {
+      activeIndex.value = 1;
+    }
+  }
+);
 function search() {
   console.log("跳转页面");
   activeIndex.value = 2;

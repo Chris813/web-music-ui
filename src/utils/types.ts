@@ -41,3 +41,27 @@ export enum songOrigin {
   currentSongList,
   SearchSongList,
 }
+
+export interface Album {
+  id: number;
+  name: string;
+  picUrl: string;
+  publishTime: number;
+  artists: Array<{ name: string; id: number }>;
+}
+
+export interface Artist {
+  id: number;
+  name: string;
+  img1v1Url: string;
+}
+
+export interface PlayList {
+  coverImgUrl: string;
+  creator: {
+    nickname: string;
+    userId: number;
+  };
+  name: string;
+  id: number;
+}

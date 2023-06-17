@@ -1,5 +1,6 @@
 <template>
-  <div class="wrapper" v-if="songUrl">
+  <!-- 用v-show让播放列表组件初始化，否则无法先播放搜索出来的音乐 -->
+  <div class="wrapper" v-show="songUrl">
     <div class="info">
       <img :src="currentPlaySong.song.al_pic" alt="" />
       <div class="text">

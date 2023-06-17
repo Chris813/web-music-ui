@@ -27,16 +27,6 @@ const routes: Array<RouteRecordRaw> = [
             name: "tracks",
             component: () => import("@components/playlist/tracks.vue"),
           },
-          {
-            path: "comments",
-            name: "comments",
-            component: () => import("@components/playlist/comments.vue"),
-          },
-          {
-            path: "subscribers",
-            name: "subscribers",
-            component: () => import("@components/playlist/subscribers.vue"),
-          },
         ],
       },
       {
