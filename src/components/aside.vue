@@ -28,13 +28,16 @@ import { useRouter } from "vue-router";
 let router = useRouter();
 let activeIndex = ref(0);
 const menuList = [
-  { icon: "icon-faxian", title: "发现" },
-  { icon: "icon-bofangMV", title: "MV" },
+  { icon: "icon-faxian", title: "发现",name:"find"},
+  { icon: "icon-bofangMV", title: "MV",name:"mv"},
   { icon: "icon-yinle", title: "我的" },
   { icon: "icon-zhanghao", title: "账号" },
 ];
 function handleSelect(index: number) {
   activeIndex.value = index;
+  router.push({
+    name: menuList[index].name,
+  });
 }
 
 let canGoBack = computed(() => {

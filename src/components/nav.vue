@@ -30,12 +30,18 @@ type menuItem = {
   title: string;
   name: string;
 };
-const menuList: menuItem[] = [
-  { title: "推荐", name: "recommend" },
-  { title: "歌单", name: "playlist" },
-  { title: "搜索", name: "search" },
-  { title: "Mv", name: "mv" },
-];
+//define props menuList
+interface Props {
+  menuList: menuItem[];
+}
+const props = defineProps<Props>()
+const menuList = props.menuList;
+// const menuList: menuItem[] = [
+//   { title: "推荐", name: "recommend" },
+//   { title: "歌单", name: "playlist" },
+//   { title: "搜索", name: "search" },
+//   { title: "Mv", name: "mv" },
+// ];
 function handleSelect(index: number) {
   activeIndex.value = index;
   router.push({
@@ -49,14 +55,17 @@ watch(
   () => route.name,
   (val) => {
     console.log(val);
-    if (val === "tracks") {
-      activeIndex.value = 1;
-    }
+    menuList.find((item, index) => {
+      if (item.name === val) {
+        activeIndex.value = index;
+        return true;
+      }
+    });
   }
 );
 function search() {
   console.log("跳转页面");
-  activeIndex.value = 2;
+  // activeIndex.value = 2;
   router.push({
     name: "search",
     query: {
@@ -107,7 +116,7 @@ nav {
   .search-bar {
     padding-left: 1.5rem;
     height: 35px;
-    display: flex;
+    // float: left;;
     width: 15rem;
     padding-right: 3rem;
     input {

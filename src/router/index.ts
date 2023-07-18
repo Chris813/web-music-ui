@@ -36,6 +36,29 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path: "/mv",
+    name: "mv",
+    redirect:'/mv/mvjingxuan',
+    component: () => import("@/pages/mv.vue"),
+    children:[
+      {
+        path:'mvjingxuan',
+        name:'mvjingxuan',
+        component:()=>import("@/pages/mvjingxuan.vue")
+      },
+      {
+        path:'special',
+        name:'special',
+        component:()=>import("@/pages/special.vue")
+      },
+      {
+        path:'allmv',
+        name:'allmv',
+        component:()=>import("@/pages/allmv.vue")
+      }
+    ]
+  }
 ];
 
 const router = createRouter({

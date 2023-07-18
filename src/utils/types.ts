@@ -65,3 +65,11 @@ export interface PlayList {
   name: string;
   id: number;
 }
+
+export interface MvItem{
+  id:number,
+  name:string,
+  artistName:string,
+  cover:string,
+  playCount:number,
+}

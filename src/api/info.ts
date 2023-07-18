@@ -63,3 +63,41 @@ export function getSearchDataApi(
     },
   });
 }
+
+export function getZuixinMvApi(limit=10){
+  return request({
+    url:'/mv/first',
+    params:{
+      limit:limit,
+    }
+  })
+}
+
+export function getPaihangMvApi(limit=10){
+  return request({
+    url:'/top/mv',
+    params:{
+      limit:limit,
+    }
+  })
+}
+
+export function getDujiaMvApi(limit=16){
+  return request({
+    url:'/mv/exclusive/rcmd',
+    params:{
+      limit:limit,
+    }
+  })
+}
+
+export function getAllMvApi(area="全部",order="上升最快",limit=16){
+  return request({
+    url:'/mv/all',
+    params:{
+      area:area,
+      order:order,
+      limit:limit,
+    }
+})
+}

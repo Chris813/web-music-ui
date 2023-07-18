@@ -1,5 +1,5 @@
 <template>
-  <my-nav></my-nav>
+  <my-nav :menu-list="menuList"></my-nav>
   <KeepAlive
     ><div class="main"><RouterView></RouterView></div
   ></KeepAlive>
@@ -7,6 +7,11 @@
 
 <script setup lang="ts">
 import MyNav from "@components/nav.vue";
+const menuList=[
+  { title: "推荐", name: "recommend" },
+  { title: "歌单", name: "playlist" },
+  { title: "搜索", name: "search" },
+];
 </script>
 
 <style scoped lang="scss">
