@@ -22,14 +22,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { vLoading } from "element-plus";
+import { ref, computed, onMounted, onUpdated } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 let router = useRouter();
 let activeIndex = ref(0);
 const menuList = [
-  { icon: "icon-faxian", title: "发现",name:"find"},
-  { icon: "icon-bofangMV", title: "MV",name:"mv"},
+  { icon: "icon-faxian", title: "发现",name:"recommend"},
+  { icon: "icon-bofangMV", title: "MV",name:"mvjingxuan"},
   { icon: "icon-yinle", title: "我的" },
   { icon: "icon-zhanghao", title: "账号" },
 ];
@@ -39,7 +40,29 @@ function handleSelect(index: number) {
     name: menuList[index].name,
   });
 }
+const route = useRoute();
+function freshNav(fullPath){
+  console.log(fullPath);
+  if(fullPath==="/"||fullPath==="/recommend"){
+    activeIndex.value=0;
+  }else if(fullPath==="/mv/mvjingxuan"){
+    activeIndex.value=1;
+  }
+  console.log(activeIndex.value);
+  // if(menuList[activeIndex.value].name!==router.currentRoute.value.name){
+  //   activeIndex.value=menuList.findIndex((item)=>item.name===router.currentRoute.value.name);
+  // }
+};
 
+onMounted(() => {
+  console.log("nav mounted");
+  console.log(route.fullPath);
+  freshNav(route.fullPath);
+});
+onUpdated(() => {
+  console.log("nav updated");
+  freshNav(route.fullPath);
+});
 let canGoBack = computed(() => {
   return router.currentRoute.value.matched.length > 1;
 });

@@ -20,7 +20,7 @@ const menuList=[
   width: 100%;
   position: relative;
   top: 60px;
-  overflow: scroll;
   height: 100%;
+  overflow-y: scroll;
 }
 </style>

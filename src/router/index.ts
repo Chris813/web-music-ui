@@ -58,6 +58,11 @@ const routes: Array<RouteRecordRaw> = [
         component:()=>import("@/pages/allmv.vue")
       }
     ]
+  },
+  {
+    path: "/video/:id",
+    name: "video",
+    component: () => import("@/pages/video.vue"),
   }
 ];
 

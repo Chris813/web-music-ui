@@ -20,7 +20,6 @@ import Playsong from "@components/playsong.vue";
   background: #fff;
   border-radius: 15px;
   display: flex;
-  overflow: hidden;
   .aside {
     flex: 0 0 80px;
   }

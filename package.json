@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@videojs-player/vue": "^1.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.3.3",
     "mitt": "^3.0.0",
     "pinia": "^2.0.36",
     "sass": "^1.62.1",
+    "video.js": "^8.3.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },

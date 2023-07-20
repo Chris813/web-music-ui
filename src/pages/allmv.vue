@@ -42,7 +42,6 @@ function handleOrderSelect(index: number) {
 }
 const mvList:Ref<MvItem[]>=ref([]);
 async function getMvList(){
-    
     const out=await getAllMvApi(areaList[activeAreaIndex.value],orderList[activeOrderIndex.value]);
     mvList.value=out.data;
     loading.value=true;

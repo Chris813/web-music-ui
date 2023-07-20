@@ -1,4 +1,4 @@
-import { useConfigStore } from "@/stores/index";
+// import { useConfigStore } from "@/stores/index";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const service: AxiosInstance = axios.create({

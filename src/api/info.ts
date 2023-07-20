@@ -101,3 +101,22 @@ export function getAllMvApi(area="全部",order="上升最快",limit=16){
     }
 })
 }
+
+export function getMvUrlApi(mvid:number){
+  return request({
+    url:'/mv/url',
+    params:{
+      id:mvid,
+    }
+  })
+}
+
+//mvdetail
+export function getMvDetailApi(mvid:number){
+  return request({
+    url:'/mv/detail',
+    params:{
+      mvid:mvid,
+    }
+  })
+}

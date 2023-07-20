@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 let activeIndex = ref(0);
@@ -50,19 +50,12 @@ function handleSelect(index: number) {
 }
 const keyword = ref("");
 const route = useRoute();
-console.log(route.name);
-watch(
-  () => route.name,
-  (val) => {
-    console.log(val);
-    menuList.find((item, index) => {
-      if (item.name === val) {
-        activeIndex.value = index;
-        return true;
-      }
-    });
+function freshNav(){
+  if(menuList[activeIndex.value].name!==route.name){
+    activeIndex.value=menuList.findIndex((item)=>item.name===route.name);
   }
-);
+};
+freshNav();
 function search() {
   console.log("跳转页面");
   // activeIndex.value = 2;

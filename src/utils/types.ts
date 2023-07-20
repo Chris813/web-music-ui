@@ -73,3 +73,16 @@ export interface MvItem{
   cover:string,
   playCount:number,
 }
+export interface MvDetail{
+  name:string,
+  artistName:string,
+  artists:{
+    img1v1Url:string,
+    followed:boolean,
+  }[],
+  desc:string,
+  playCount:number,
+  shareCount:number,
+  subCount:number,
+  publishTime:string,
+}

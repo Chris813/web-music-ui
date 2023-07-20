@@ -1,6 +1,6 @@
 <template>
         <div class="mv">
-            <div class="card" v-for="item in mv" key="item">
+            <div class="card" v-for="(item,index) in mv" :key="index" @click="playMv(index)">
                 <div class="count">{{ formatCount(item.playCount) }}</div>
                 <img class="image" :src="item.cover" alt="">
                 <div class="name">{{ item.name }}-{{ item.artistName }}</div>
@@ -9,18 +9,27 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, onBeforeUpdate, onUpdated, ref } from "vue";
+import { Ref, onBeforeUpdate,ref } from "vue";
 import {MvItem} from "../../utils/types"
 import {formatCount} from '../../utils/fommater';
+import { useRouter } from "vue-router";
 interface Props {
-    mv:Ref<MvItem[]>;
+    mv:MvItem[];
 }
+const router=useRouter();
 const prop=defineProps<Props>();
 console.log(prop);
 let mv:Ref<MvItem[]>=ref([]);
-
+function playMv(index:number){
+    router.push({
+        name:"video",
+        params: {
+            id: mv.value[index].id,
+        }
+    })
+}
 onBeforeUpdate(()=>{
-    mv=prop.mv;
+    mv.value=prop.mv;
 })
 </script>
 
