@@ -9,7 +9,7 @@
 import MyNav from "@components/nav.vue";
 const menuList=[
   { title: "推荐", name: "recommend" },
-  { title: "歌单", name: "playlist" },
+  { title: "歌单", name: "gedan" },
   { title: "搜索", name: "search" },
 ];
 </script>

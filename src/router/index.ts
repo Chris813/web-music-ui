@@ -34,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
         name: "search",
         component: () => import("@/pages/search.vue"),
       },
+      {
+        path:"songlist",
+        name:"gedan",
+        component:()=>import("@/pages/gedan.vue")
+      }
     ],
   },
   {

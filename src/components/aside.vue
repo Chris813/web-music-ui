@@ -31,8 +31,8 @@ let activeIndex = ref(0);
 const menuList = [
   { icon: "icon-faxian", title: "发现",name:"recommend"},
   { icon: "icon-bofangMV", title: "MV",name:"mvjingxuan"},
-  { icon: "icon-yinle", title: "我的" },
-  { icon: "icon-zhanghao", title: "账号" },
+  // { icon: "icon-yinle", title: "我的" },
+  // { icon: "icon-zhanghao", title: "账号" },
 ];
 function handleSelect(index: number) {
   activeIndex.value = index;

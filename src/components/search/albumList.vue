@@ -41,7 +41,7 @@ initAlbumSearchData(keyword, 10);
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
-  padding: 30px 0;
+  padding: 30px 0 40px 0;
 
   .aname {
     white-space: nowrap;

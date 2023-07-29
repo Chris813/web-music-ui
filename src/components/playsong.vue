@@ -85,7 +85,9 @@ import tracklist from "@/components/playlist/trackList.vue";
 import { SongTableItem } from "@/utils/types";
 import { useSongStore } from "@/stores";
 import { storeToRefs } from "pinia";
-
+import { useRoute } from "vue-router";
+const route=useRoute();
+console.log(route.name);
 const song: Ref<SongTableItem> = ref({
   name: "",
   s_singer: "",
@@ -275,6 +277,9 @@ function playSong(songId: number) {
 watch(
   () => bus.value.get("playSong"),
   (val) => {
+    // if(val[1].includes("mv")){
+    //   songUrl.value="";
+    // }
     //从歌单列表中删除歌曲
     if (!val) {
       console.log("当前播放歌曲被删除");
@@ -291,6 +296,16 @@ watch(
     }
   }
 );
+watch(
+  ()=>route.name,
+  (val)=>{
+    console.log(val);
+    if(val.toString().includes("mv")){
+      audio.value.pause();
+      songUrl.value="";
+    }
+  }
+)
 
 //显示当前播放歌单
 const isShowTrack = ref(false);
@@ -304,6 +319,7 @@ async function getSongUrl(sid: number) {
   // isPlay.value = true;
   resetAudio();
 }
+
 </script>
 
 <style scoped lang="scss">
@@ -314,7 +330,7 @@ async function getSongUrl(sid: number) {
   position: fixed;
   background-color: #fff;
   width: 100%;
-  bottom: 43px;
+  bottom: 37px;
   height: 100px;
   max-width: 1280px;
   border-radius: 0 0 15px 15px;

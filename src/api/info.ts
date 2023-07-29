@@ -120,3 +120,26 @@ export function getMvDetailApi(mvid:number){
     }
   })
 }
+
+//mv review
+export function getMvReviewApi(mvid:number,limit:number=20,offset:number=0){
+  return request({
+    url:'/comment/mv',
+    params:{
+      id:mvid,
+      limit:limit,
+      offset:offset,
+    }
+  })
+}
+
+//top songlist
+export function getTopSonglistApi(offset:number=0,limit:number=24){
+  return request({
+    url:'/top/playlist',
+    params:{
+      limit:limit,
+      offset:offset*limit,
+    }
+  })
+}

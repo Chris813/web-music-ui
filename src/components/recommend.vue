@@ -114,7 +114,7 @@ getPlaylist();
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    padding-top: 30px;
+    padding: 30px 0 10px 0;
     .p-item {
       position: relative;
       img {

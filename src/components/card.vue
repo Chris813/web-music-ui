@@ -36,7 +36,7 @@ const loading = ref(props.loading);
   width: 160px;
   padding: 10px 0;
   border-radius: 10px;
-  margin: 0 10px;
+  margin: 0 5px;
   &:hover {
     background-color: darken(white, 5%);
   }

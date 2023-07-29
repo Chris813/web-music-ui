@@ -12,7 +12,7 @@
         播放：{{ mvDetail.playCount }}   分享：{{ mvDetail.shareCount }}   收藏：{{ mvDetail.subCount }}   发布时间：{{ mvDetail.publishTime }}
     </div>
     <div class="video">
-    <video autoplay controls loop name="media" :src="mvUrl" style="width: 100%;border-radius: 10px;">
+    <video autoplay controls loop name="media" :src="mvUrl" style="width: 95%;border-radius: 10px;">
         <!-- <source  type="video/mp4"> -->
         您的浏览器不支持 video 标签
     </video>
@@ -25,23 +25,24 @@
         <div class="desc" v-if="mvDetail.desc">简介：{{ mvDetail.desc }}</div>
     </div>
     </div>
-    
-    <!-- <video-player
-    height="500px"
-    :src="mvUrl"
-    controls
-    :loop="true"
-    :volume="0.6"
-  /> -->
+    <div class="comments">
+        <div class="comment" v-for="(item,index) in mvComment" :key="index"> 
+        
+           <div class="name"><img :src="item.user.avatarUrl" alt="" class="useravatar">{{ item.user.nickname}}
+           </div>
+           <span class="time">{{formatDate( item.time )}}</span><span class="content">{{ item.content }}</span>
+        </div>
+    </div>
 </div>
 </div>
 </template>
 
 <script setup lang="ts">
-import {getMvUrlApi,  getMvDetailApi} from "@/api/info";
-import { MvDetail} from "@/utils/types";
+import {getMvUrlApi,  getMvDetailApi,getMvReviewApi} from "@/api/info";
+import { MvDetail, mvCommentItem} from "@/utils/types";
 import { Ref, ref } from "vue";
 import { useRouter } from 'vue-router';
+import {formatDate} from "@/utils/fommater";
 const router=useRouter();
 const mvid=Number(router.currentRoute.value.params.id);
 const mvUrl=ref("");
@@ -65,13 +66,37 @@ const mvDetail:Ref<MvDetail>=ref({
     subCount:0,
     publishTime:"",
 });
+
 const  getMvDetail=async ()=>{
     const out=await getMvDetailApi(mvid);
     mvDetail.value=out.data;
-    console.log(out.data);
+}
+
+const mvComment:Ref<mvCommentItem[]>=ref([{
+    user:{
+        avatarUrl:"",
+        nickname:"",
+    },
+    content:"",
+    time:0,
+    likedCount:0,
+    beReplied:[
+        {
+            user:{
+                avatarUrl:"",
+                nickname:"",
+            },
+            content:"",
+        }
+    ],
+    }]);
+const  getMvReview=async ()=>{
+    const out=await getMvReviewApi(mvid);
+    mvComment.value=out.comments;
 }
 getMvUrl();
 getMvDetail();
+getMvReview();
 </script>
 
 <style scoped lang="scss">
@@ -103,6 +128,7 @@ getMvDetail();
                 border-radius: 50%;
                 overflow: hidden;
                 margin-right: 10px;
+                
                 img{
                     width: 100%;
                     height: 100%;
@@ -119,7 +145,45 @@ getMvDetail();
             text-align: left;
         }
     }
-}
+    .comments{
+        margin: 20px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .comment{
+            width: 230px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            margin: 5px;
+            background-color: rgb(146 151 179 / 13%);
+            align-items: flex-start;
+            .name{
+                font-size: 15px;
+                display: flex;
+                align-items: center;
+                padding-bottom: 5px;
+                .useravatar{
+                width: 30px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 10px;
+                display: inline;
+            }
+            }
+            .time{
+                font-size: 12px;
+                color: #999;
+                margin-bottom: 5px;
+            }
+            .content{
+                font-size: 13px;
+            }
+
+        }
+    }
+    }
 }
  
 </style>

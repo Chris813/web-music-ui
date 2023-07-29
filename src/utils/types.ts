@@ -86,3 +86,19 @@ export interface MvDetail{
   subCount:number,
   publishTime:string,
 }
+export interface mvCommentItem{
+  user:{
+    avatarUrl:string,
+    nickname:string,
+  },
+  content:string,
+  time:number,
+  likedCount:number,
+  beReplied:{
+    user:{
+      avatarUrl:string,
+      nickname:string,
+    },
+    content:string,
+  }[],
+}

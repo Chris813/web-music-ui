@@ -281,6 +281,7 @@ onMounted(() => {
   }
   .content {
     overflow: hidden auto;
+    padding-bottom: 100px
   }
 }
 </style>
